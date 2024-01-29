@@ -1,4 +1,4 @@
-package potemday.pilsa.member.domain;
+package potenday.pilsa.member.domain;
 
 public enum Status {
     ACTIVE, IDLE, RESIGN

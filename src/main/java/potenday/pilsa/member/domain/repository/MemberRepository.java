@@ -1,7 +1,7 @@
-package potemday.pilsa.member.domain.repository;
+package potenday.pilsa.member.domain.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
-import potemday.pilsa.member.domain.Member;
+import potenday.pilsa.member.domain.Member;
 
 public interface MemberRepository extends JpaRepository<Member, Long> {
 }
