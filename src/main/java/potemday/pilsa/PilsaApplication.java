@@ -1,8 +1,7 @@
-package com.example.pilsa;
+package potemday.pilsa;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
 
 @SpringBootApplication
 public class PilsaApplication {

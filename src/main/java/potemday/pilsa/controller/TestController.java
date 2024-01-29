@@ -1,4 +1,4 @@
-package com.example.pilsa.controller;
+package potemday.pilsa.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;

@@ -1,4 +1,4 @@
-package com.example.pilsa.config;
+package potemday.pilsa.config;
 
 import io.swagger.v3.oas.models.Components;
 import io.swagger.v3.oas.models.OpenAPI;
