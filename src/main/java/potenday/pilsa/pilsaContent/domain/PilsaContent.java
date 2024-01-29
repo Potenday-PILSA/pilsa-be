@@ -1,9 +1,10 @@
-package potenday.pilsa.pilsa.domain;
+package potenday.pilsa.pilsaContent.domain;
 
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import potenday.pilsa.pilsaImage.domain.PilsaImage;
 
 import java.time.LocalDateTime;
 import java.util.List;

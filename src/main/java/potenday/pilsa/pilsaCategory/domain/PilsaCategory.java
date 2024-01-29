@@ -1,4 +1,4 @@
-package potenday.pilsa.pilsa.domain;
+package potenday.pilsa.pilsaCategory.domain;
 
 import jakarta.persistence.*;
 import lombok.AccessLevel;

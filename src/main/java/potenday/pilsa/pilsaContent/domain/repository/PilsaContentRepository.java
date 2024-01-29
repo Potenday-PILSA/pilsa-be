@@ -1,7 +1,7 @@
-package potenday.pilsa.pilsa.domain.repository;
+package potenday.pilsa.pilsaContent.domain.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
-import potenday.pilsa.pilsa.domain.PilsaContent;
+import potenday.pilsa.pilsaContent.domain.PilsaContent;
 
 public interface PilsaContentRepository extends JpaRepository<PilsaContent, Long> {
 }

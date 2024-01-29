@@ -1,9 +1,11 @@
-package potenday.pilsa.pilsa.domain;
+package potenday.pilsa.relationPilsaCategory.domain;
 
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import potenday.pilsa.pilsa.domain.Pilsa;
+import potenday.pilsa.pilsaCategory.domain.PilsaCategory;
 
 import java.util.List;
 

@@ -1,7 +1,7 @@
-package potenday.pilsa.pilsa.domain.repository;
+package potenday.pilsa.pilsaImage.domain.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
-import potenday.pilsa.pilsa.domain.PilsaImage;
+import potenday.pilsa.pilsaImage.domain.PilsaImage;
 
 public interface PilsaImageRepository extends JpaRepository<PilsaImage, Long> {
 }

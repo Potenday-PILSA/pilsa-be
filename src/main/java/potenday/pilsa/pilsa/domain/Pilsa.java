@@ -5,6 +5,7 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import potenday.pilsa.member.domain.Member;
+import potenday.pilsa.pilsaContent.domain.PilsaContent;
 
 import java.time.LocalDateTime;
 import java.util.List;
