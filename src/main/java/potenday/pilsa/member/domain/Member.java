@@ -29,7 +29,7 @@ public class Member {
 
     private String memberKey;
 
-    private String descript;
+    private String description;
 
     private String profileImageUrl;
 
