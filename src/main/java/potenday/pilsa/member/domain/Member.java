@@ -38,4 +38,14 @@ public class Member {
     private LocalDateTime registDate;
 
     private LocalDateTime updateDate;
+
+    public Member (SocialType socialType, String email, String memberKey, String profileImageUrl, String profileNickName) {
+        this.socialType = socialType;
+        this.email = email;
+        this.memberKey = memberKey;
+        this.profileImageUrl = profileImageUrl;
+        this.profileNickName = profileNickName;
+        this.registDate = LocalDateTime.now();
+        this.status = Status.ACTIVE;
+    }
 }
