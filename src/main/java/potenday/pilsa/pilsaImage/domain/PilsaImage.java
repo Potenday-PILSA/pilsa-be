@@ -20,10 +20,6 @@ public class PilsaImage {
     @Column
     private String imageUrl;
 
-    // 배경 색상
-    @Column
-    private String backgroundColor;
-
     // 대표 이미지 여부
     @Enumerated(value = EnumType.STRING)
     @Column
@@ -32,9 +28,5 @@ public class PilsaImage {
     // 이미지 순서
     @Column
     private Integer imageSeq;
-
-    private LocalDateTime registDate;
-
-    private LocalDateTime updateDate;
 
 }
