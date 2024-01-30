@@ -34,8 +34,11 @@ jobs:
     - name: make application.yml
       if: true 
       run: |
-        touch ./src/main/resources/application.yml
-        echo "${{ secrets.APPLICATIONYML_DEV }}" > ./src/main/resources/application.yml
+        cd ./src/main
+        mkdir resources
+        cd resources
+        touch ./application.yml
+        echo "${{ secrets.APPLICATIONYML_DEV }}" > ./application.yml
             
     - name: Build with Gradle
       run: ./gradlew build
