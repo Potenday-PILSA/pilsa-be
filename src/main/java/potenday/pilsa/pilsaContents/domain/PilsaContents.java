@@ -1,4 +1,4 @@
-package potenday.pilsa.pilsaContent.domain;
+package potenday.pilsa.pilsaContents.domain;
 
 import jakarta.persistence.*;
 import lombok.AccessLevel;
@@ -12,11 +12,11 @@ import java.util.List;
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@Table(name = "pilsaContent")
-public class PilsaContent {
+@Table(name = "pilsaContents")
+public class PilsaContents {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long contentId;
+    private Long contentsId;
 
     // 콘텐츠 문구
     @Column
