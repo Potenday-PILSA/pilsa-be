@@ -45,7 +45,17 @@ public class MemberController {
         return ResponseEntity.ok(memberService.updateMember(memberId, request));
     }
 
-    @Operation(summary = "회원 번호 1의 테스트 엑세스토큰을 생성합니다.", description = "")
+    @Operation(summary = "회원을 탈퇴 시키는 API", description = "")
+    @DeleteMapping("/member")
+    public ResponseEntity<Void> deleteMember(
+            @Parameter(hidden = true) @Auth Long memberId,
+            @CookieValue("refresh-token") final String refreshToken) {
+        memberService.deleteMember(memberId, refreshToken);
+
+        return ResponseEntity.noContent().build();
+    }
+
+    @Operation(summary = "[TEST API]회원 번호 1의 테스트 엑세스토큰을 생성합니다.", description = "토큰 테스트를 위한 API 입니다 되도록 리프레쉬 토큰까지 생성되는것 보다 해당 API 를 활용해주세요. 리프레쉬 토큰은 저장되기 때문이에요.")
     @PostMapping("/test/get-access-token")
     public ResponseEntity<AccessTokenResponse> getToken() {
         String accessToken = tokenProvider.createAccessToken(1L);
@@ -56,7 +66,7 @@ public class MemberController {
                 .build());
     }
 
-    @Operation(summary = "회원 번호 1의 테스트 엑세스토큰&리프레쉬 토큰을 생성합니다.", description = "")
+    @Operation(summary = "[TEST API]회원 번호 1의 테스트 엑세스토큰&리프레쉬 토큰을 생성합니다.", description = " 리프레쉬 토큰은 저장되기 때문에 되도록 엑세스 토큰 발급만 하는 API 를 활용해주세요! 리프레쉬 토큰이 꼭 필요하다면 해당 API 로 발급해주세요!")
     @PostMapping("/test/get-all-token")
     public ResponseEntity<TokenPair> getAllToken() {
         TokenPair tokenPair = tokenProvider.createTokenPair(1L);
