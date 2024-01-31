@@ -1,5 +1,6 @@
 package potenday.pilsa.login.domain;
 
+import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
 import org.springframework.beans.factory.annotation.Value;
@@ -66,5 +67,17 @@ public class TokenProvider {
                         .memberId(memberId)
                         .build()
         );
+    }
+
+    public Long getMemberIdFromAccessToken(String accessToken) {
+        return Long.parseLong(parseJwt(accessToken).getSubject());
+    }
+
+    private Claims parseJwt(String token) {
+        return Jwts.parser()
+                .verifyWith(secretKey)
+                .build()
+                .parseSignedClaims(token)
+                .getPayload();
     }
 }
