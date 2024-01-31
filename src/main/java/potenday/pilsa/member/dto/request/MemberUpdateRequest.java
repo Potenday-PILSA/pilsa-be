@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class MemberUpdateRequest {
 
-    @Size(max = 50, message = "소개글은 최대 50자로 작성할 수 있습니다.")
+    @Size(max = 100, message = "소개글은 최대 100자로 작성할 수 있습니다.")
     private String description;
 
     @Builder
