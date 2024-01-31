@@ -1,9 +1,16 @@
 package potenday.pilsa.login.domain;
 
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.ExpiredJwtException;
+import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
+import potenday.pilsa.global.exception.AccessTokenException;
+import potenday.pilsa.global.exception.AuthException;
+import potenday.pilsa.global.exception.BadRequestException;
+import potenday.pilsa.global.exception.ExceptionCode;
 import potenday.pilsa.login.domain.repository.RefreshTokenRepository;
 import potenday.pilsa.login.dto.response.TokenPair;
 
@@ -43,7 +50,7 @@ public class TokenProvider {
                 .build();
     }
 
-    private String createAccessToken(final Long memberId) {
+    public String createAccessToken(final Long memberId) {
         final Date now = new Date();
         final Date expirationDate = new Date(now.getTime() + accessTokenExpirationTime);
 
@@ -66,5 +73,58 @@ public class TokenProvider {
                         .memberId(memberId)
                         .build()
         );
+    }
+
+    public Boolean isExpiredAccessAndValidRefreshToken(String accessToken, String refreshToken) {
+        try {
+            Long memberId = getMemberIdFromAccessToken(accessToken);
+            validateRefreshToken(refreshToken, memberId);
+            return false;
+        } catch (AccessTokenException e) {
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
+    private void validateRefreshToken(String refreshToken, Long memberId) {
+        RefreshToken token = refreshTokenRepository.findById(refreshToken).orElseThrow(
+                NullPointerException::new
+        );
+
+        if (!memberId.equals(token.getMemberId())) {
+            throw new NullPointerException();
+        }
+    }
+
+    public void deleteRefreshToken(String refreshToken) {
+        refreshTokenRepository.deleteById(refreshToken);
+    }
+
+    public Long getMemberIdFromAccessToken(String accessToken) {
+        return Long.parseLong(parseJwt(accessToken).getSubject());
+    }
+
+    public Long getMemberIdFromExpiredJwtToken(String token) {
+        RefreshToken refreshToken = refreshTokenRepository.findById(token).orElseThrow(
+                () -> new AuthException(ExceptionCode.EXPIRED_REFRESH_TOKEN)
+        );
+
+        return refreshToken.getMemberId();
+    }
+
+    private Claims parseJwt(String token) {
+        try {
+            return Jwts.parser()
+                    .verifyWith(secretKey)
+                    .build()
+                    .parseSignedClaims(token)
+                    .getPayload();
+
+        } catch (ExpiredJwtException e) {
+            throw new AccessTokenException(ExceptionCode.EXPIRED_ACCESS_TOKEN);
+        } catch (JwtException | IllegalArgumentException e) {
+            throw new BadRequestException(ExceptionCode.INVALID_ACCESS_TOKEN);
+        }
     }
 }
