@@ -28,7 +28,7 @@ public class LoginController {
                 .accessToken(tokenPair.getAccessToken())
                 .build();
 
-        ResponseCookie refreshTokenCookie = ResponseCookie.from("refreshToken", tokenPair.getRefreshToken())
+        ResponseCookie refreshTokenCookie = ResponseCookie.from("refresh-token", tokenPair.getRefreshToken())
                 .maxAge(3600) // 쿠키 유효 시간 설정 (초 단위)
                 .httpOnly(true) // HttpOnly 속성 설정 (JavaScript에서 접근 불가)
 //                .secure(true) // HTTPS에서만 전송되도록 설정 (선택적) TODO : 개발환경에서는 X
@@ -45,7 +45,6 @@ public class LoginController {
     public ResponseEntity<?> extendLogin(
             @RequestHeader("Authorization") final String authorizationHeader,
             @CookieValue("refresh-token") final String refreshToken) {
-
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(loginService.renewAccessToken(authorizationHeader, refreshToken));
     }

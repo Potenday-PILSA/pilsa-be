@@ -1,10 +1,15 @@
 package potenday.pilsa.login.domain;
 
 import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.ExpiredJwtException;
+import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
+import potenday.pilsa.global.exception.AccessTokenException;
+import potenday.pilsa.global.exception.BadRequestException;
+import potenday.pilsa.global.exception.ExceptionCode;
 import potenday.pilsa.login.domain.repository.RefreshTokenRepository;
 import potenday.pilsa.login.dto.response.TokenPair;
 
@@ -69,12 +74,14 @@ public class TokenProvider {
         );
     }
 
-    public boolean isExpiredAccessAndValidRefreshToken(String accessToken, String refreshToken) {
+    public Boolean isExpiredAccessAndValidRefreshToken(String accessToken, String refreshToken) {
         try {
             Long memberId = getMemberIdFromAccessToken(accessToken);
             validateRefreshToken(refreshToken, memberId);
             return false;
-        }  catch (Exception e) {
+        } catch (AccessTokenException e) {
+            return true;
+        } catch (Exception e) {
             return false;
         }
     }
@@ -97,11 +104,30 @@ public class TokenProvider {
         return Long.parseLong(parseJwt(accessToken).getSubject());
     }
 
+    public Long getMemberIdFromExpiredJwtToken(String accessToken) {
+        try {
+            return Long.parseLong(Jwts.parser()
+                    .verifyWith(secretKey)
+                    .build()
+                    .parseSignedClaims(accessToken)
+                    .getPayload().getSubject());
+        } catch (ExpiredJwtException e) {
+            return Long.parseLong(e.getClaims().getSubject());
+        }
+    }
+
     private Claims parseJwt(String token) {
-        return Jwts.parser()
-                .verifyWith(secretKey)
-                .build()
-                .parseSignedClaims(token)
-                .getPayload();
+        try {
+            return Jwts.parser()
+                    .verifyWith(secretKey)
+                    .build()
+                    .parseSignedClaims(token)
+                    .getPayload();
+
+        } catch (ExpiredJwtException e) {
+            throw new AccessTokenException(ExceptionCode.EXPIRED_ACCESS_TOKEN);
+        } catch (JwtException | IllegalArgumentException e) {
+            throw new BadRequestException(ExceptionCode.INVALID_ACCESS_TOKEN);
+        }
     }
 }

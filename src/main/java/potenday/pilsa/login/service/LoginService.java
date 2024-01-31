@@ -2,6 +2,8 @@ package potenday.pilsa.login.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import potenday.pilsa.global.exception.AuthException;
+import potenday.pilsa.global.exception.ExceptionCode;
 import potenday.pilsa.login.AccessTokenExtractor;
 import potenday.pilsa.login.domain.KakaoProvider;
 import potenday.pilsa.login.domain.TokenProvider;
@@ -32,15 +34,15 @@ public class LoginService {
     }
 
     public AccessTokenResponse renewAccessToken(
-            String authorizationHeader, String refreshToken) {
+            String authorizationHeader, String refreshToken)  {
         String accessToken = accessTokenExtractor.extractAccessToken(authorizationHeader);
 
         if (!tokenProvider.isExpiredAccessAndValidRefreshToken(accessToken, refreshToken)) {
             logout(refreshToken);
-            throw new NullPointerException();
+            throw new AuthException(ExceptionCode.FAIL_TO_VALIDATE_TOKEN);
         }
 
-        Long memberId = tokenProvider.getMemberIdFromAccessToken(accessToken);
+        Long memberId = tokenProvider.getMemberIdFromExpiredJwtToken(accessToken);
 
         return AccessTokenResponse.builder()
                 .accessToken(tokenProvider.createAccessToken(memberId))
