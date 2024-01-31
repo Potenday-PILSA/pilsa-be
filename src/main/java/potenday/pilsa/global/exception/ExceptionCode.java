@@ -7,6 +7,9 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public enum ExceptionCode {
     INVALID_REQUEST(1000, "올바르지 않은 요청입니다."),
+
+    NOT_FOUND_MEMBER(2001, "회원을 찾을 수 없습니다."),
+
     EXPIRED_ACCESS_TOKEN(5101, "만료된 액세스 토큰입니다."),
     EXPIRED_REFRESH_TOKEN(5102, "만료된 리프레시 토큰입니다."),
     INVALID_ACCESS_TOKEN(5103, "유효하지 않은 액세스 토큰입니다."),
