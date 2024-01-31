@@ -49,4 +49,8 @@ public class Member {
         this.registDate = LocalDateTime.now();
         this.status = Status.ACTIVE;
     }
+
+    public void updateDescription(String description) {
+        this.description = description;
+    }
 }
