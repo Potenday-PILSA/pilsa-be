@@ -6,6 +6,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import potenday.pilsa.login.Auth;
 import potenday.pilsa.login.dto.request.LoginRequest;
 import potenday.pilsa.login.dto.response.AccessTokenResponse;
 import potenday.pilsa.login.dto.response.TokenPair;
@@ -44,8 +45,19 @@ public class LoginController {
     @PostMapping("/token")
     public ResponseEntity<?> extendLogin(
             @RequestHeader("Authorization") final String authorizationHeader,
-            @CookieValue("refresh-token") final String refreshToken) {
+            @CookieValue("refresh-token") final String refreshToken
+    ) {
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(loginService.renewAccessToken(authorizationHeader, refreshToken));
+    }
+
+    @DeleteMapping("/logout")
+    public ResponseEntity<Void> logout(
+            @Auth Long memberId,
+            @CookieValue("refresh-token") final String refreshToken
+            ) {
+        loginService.logout(refreshToken);
+
+        return ResponseEntity.ok().build();
     }
 }

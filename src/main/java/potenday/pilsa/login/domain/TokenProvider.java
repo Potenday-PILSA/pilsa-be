@@ -8,6 +8,7 @@ import io.jsonwebtoken.security.Keys;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import potenday.pilsa.global.exception.AccessTokenException;
+import potenday.pilsa.global.exception.AuthException;
 import potenday.pilsa.global.exception.BadRequestException;
 import potenday.pilsa.global.exception.ExceptionCode;
 import potenday.pilsa.login.domain.repository.RefreshTokenRepository;
@@ -104,16 +105,12 @@ public class TokenProvider {
         return Long.parseLong(parseJwt(accessToken).getSubject());
     }
 
-    public Long getMemberIdFromExpiredJwtToken(String accessToken) {
-        try {
-            return Long.parseLong(Jwts.parser()
-                    .verifyWith(secretKey)
-                    .build()
-                    .parseSignedClaims(accessToken)
-                    .getPayload().getSubject());
-        } catch (ExpiredJwtException e) {
-            return Long.parseLong(e.getClaims().getSubject());
-        }
+    public Long getMemberIdFromExpiredJwtToken(String token) {
+        RefreshToken refreshToken = refreshTokenRepository.findById(token).orElseThrow(
+                () -> new AuthException(ExceptionCode.EXPIRED_REFRESH_TOKEN)
+        );
+
+        return refreshToken.getMemberId();
     }
 
     private Claims parseJwt(String token) {

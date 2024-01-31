@@ -42,7 +42,7 @@ public class LoginService {
             throw new AuthException(ExceptionCode.FAIL_TO_VALIDATE_TOKEN);
         }
 
-        Long memberId = tokenProvider.getMemberIdFromExpiredJwtToken(accessToken);
+        Long memberId = tokenProvider.getMemberIdFromExpiredJwtToken(refreshToken);
 
         return AccessTokenResponse.builder()
                 .accessToken(tokenProvider.createAccessToken(memberId))
