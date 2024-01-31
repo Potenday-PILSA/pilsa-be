@@ -1,5 +1,9 @@
 package potenday.pilsa.login.controller;
 
+import io.swagger.v3.oas.annotations.OpenAPIDefinition;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -12,6 +16,7 @@ import potenday.pilsa.login.dto.response.AccessTokenResponse;
 import potenday.pilsa.login.dto.response.TokenPair;
 import potenday.pilsa.login.service.LoginService;
 
+@Tag(name = "로그인 Controller")
 @Slf4j
 @RestController
 @RequiredArgsConstructor
@@ -19,6 +24,7 @@ import potenday.pilsa.login.service.LoginService;
 public class LoginController {
     private final LoginService loginService;
 
+    @Operation(summary = "회원가입 & 로그인", description = "")
     @PostMapping("/login")
     public ResponseEntity<AccessTokenResponse> login(
             @RequestBody LoginRequest request) {
@@ -42,8 +48,9 @@ public class LoginController {
                 .body(accessTokenRes);
     }
 
+    @Operation(summary = "엑세스 토큰이 만료되었을때 토큰 반환", description = "AccessTokenResponse")
     @PostMapping("/token")
-    public ResponseEntity<?> extendLogin(
+    public ResponseEntity<AccessTokenResponse> extendLogin(
             @RequestHeader("Authorization") final String authorizationHeader,
             @CookieValue("refresh-token") final String refreshToken
     ) {
@@ -51,9 +58,10 @@ public class LoginController {
                 .body(loginService.renewAccessToken(authorizationHeader, refreshToken));
     }
 
+    @Operation(summary = "로그아웃", description = "")
     @DeleteMapping("/logout")
     public ResponseEntity<Void> logout(
-            @Auth Long memberId,
+            @Parameter(hidden = true) @Auth Long memberId,
             @CookieValue("refresh-token") final String refreshToken
             ) {
         loginService.logout(refreshToken);
