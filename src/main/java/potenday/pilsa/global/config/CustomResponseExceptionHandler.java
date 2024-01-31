@@ -11,9 +11,8 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 import potenday.pilsa.global.exception.BadRequestException;
 
 @ControllerAdvice
-public class CustomResponseEntityExceptionHandler extends ResponseEntityExceptionHandler {
-    private static final Logger logger = LoggerFactory.getLogger(CustomResponseEntityExceptionHandler.class);
-
+public class CustomResponseExceptionHandler extends ResponseEntityExceptionHandler {
+    private static final Logger logger = LoggerFactory.getLogger(CustomResponseExceptionHandler.class);
 
     @ExceptionHandler(BadRequestException.class)
     public final ResponseEntity<ErrorResponse> handleAuthException(BadRequestException ex, WebRequest request) {
