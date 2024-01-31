@@ -2,6 +2,7 @@ package potenday.pilsa.pilsa.domain;
 
 import jakarta.persistence.*;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import potenday.pilsa.member.domain.Member;
@@ -58,4 +59,15 @@ public class Pilsa {
     private LocalDateTime registDate;
 
     private LocalDateTime updateDate;
+
+    @Builder
+    public Pilsa(String title, String author, String publisher, YN privateType, Long followPilsaId, List<PilsaContents> contents) {
+        this.title = title;
+        this.author = author;
+        this.publisher = publisher;
+        this.privateType = privateType;
+        this.followPilsaId = followPilsaId;
+        this.pilsaContents = contents;
+    }
+
 }
