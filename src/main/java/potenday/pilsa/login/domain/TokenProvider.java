@@ -44,7 +44,7 @@ public class TokenProvider {
                 .build();
     }
 
-    private String createAccessToken(final Long memberId) {
+    public String createAccessToken(final Long memberId) {
         final Date now = new Date();
         final Date expirationDate = new Date(now.getTime() + accessTokenExpirationTime);
 
@@ -67,6 +67,30 @@ public class TokenProvider {
                         .memberId(memberId)
                         .build()
         );
+    }
+
+    public boolean isExpiredAccessAndValidRefreshToken(String accessToken, String refreshToken) {
+        try {
+            Long memberId = getMemberIdFromAccessToken(accessToken);
+            validateRefreshToken(refreshToken, memberId);
+            return false;
+        }  catch (Exception e) {
+            return false;
+        }
+    }
+
+    private void validateRefreshToken(String refreshToken, Long memberId) {
+        RefreshToken token = refreshTokenRepository.findById(refreshToken).orElseThrow(
+                NullPointerException::new
+        );
+
+        if (!memberId.equals(token.getMemberId())) {
+            throw new NullPointerException();
+        }
+    }
+
+    public void deleteRefreshToken(String refreshToken) {
+        refreshTokenRepository.deleteById(refreshToken);
     }
 
     public Long getMemberIdFromAccessToken(String accessToken) {

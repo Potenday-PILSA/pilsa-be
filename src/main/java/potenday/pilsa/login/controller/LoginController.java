@@ -2,12 +2,10 @@ package potenday.pilsa.login.controller;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import potenday.pilsa.login.dto.request.LoginRequest;
 import potenday.pilsa.login.dto.response.AccessTokenResponse;
 import potenday.pilsa.login.dto.response.TokenPair;
@@ -41,5 +39,14 @@ public class LoginController {
         return ResponseEntity.ok()
                 .header("Set-Cookie", refreshTokenCookie.toString())
                 .body(accessTokenRes);
+    }
+
+    @PostMapping("/token")
+    public ResponseEntity<?> extendLogin(
+            @RequestHeader("Authorization") final String authorizationHeader,
+            @CookieValue("refresh-token") final String refreshToken) {
+
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(loginService.renewAccessToken(authorizationHeader, refreshToken));
     }
 }
