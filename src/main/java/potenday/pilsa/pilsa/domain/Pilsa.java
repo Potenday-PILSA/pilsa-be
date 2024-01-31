@@ -5,7 +5,7 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import potenday.pilsa.member.domain.Member;
-import potenday.pilsa.pilsaContent.domain.PilsaContent;
+import potenday.pilsa.pilsaContents.domain.PilsaContents;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -33,6 +33,14 @@ public class Pilsa {
     @Column
     private Status status;
 
+    // 저자
+    @Column
+    private String author;
+
+    // 출판사
+    @Column
+    private String publisher;
+
     // 나만보기 여부
     @Enumerated(value = EnumType.STRING)
     @Column
@@ -45,7 +53,7 @@ public class Pilsa {
     // 필사 콘텐츠 ID
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn(name = "pilsaId")
-    List<PilsaContent> pilsaContents;
+    List<PilsaContents> pilsaContents;
 
     private LocalDateTime registDate;
 
