@@ -1,6 +1,7 @@
 package potenday.pilsa.pilsa.dto.request;
 
 import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.validation.constraints.NotBlank;
 import lombok.*;
 import potenday.pilsa.pilsa.domain.YN;
 import potenday.pilsa.pilsaImage.dto.request.ImageRequest;
@@ -12,6 +13,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class RequestPilsaInfoDto {
+    @NotBlank(message = "제목을 필수 입력값 입니다.")
     @Schema(description = "제목")
     private String title;
     @Schema(description = "저자")

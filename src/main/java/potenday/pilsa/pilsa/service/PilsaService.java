@@ -54,19 +54,20 @@ public class PilsaService {
 
 
     public Pilsa createPilsa(Long memberId, RequestPilsaInfoDto request) {
+        validationCategoryCount(request.getCategoryCd());
+
         Member member = getMember(memberId);
         List<PilsaCategory> categoryList = pilsaCategoryRepository.findByCategoryCdIn(request.getCategoryCd());
 
-        Pilsa pilsa = Pilsa.builder()
-                        .title(request.getTitle())
-                        .member(member)
-                        .author(request.getAuthor())
-                        .publisher(request.getPublisher())
-                        .textContents(request.getTextContents())
-                        .backgroundColor(request.getBackgroundColor())
-                        .backgroundImageUrl(request.getBackgroundImageUrl())
-                        .images(getPilsaImages(request.getImages()))
-                        .build();
+        Pilsa pilsa = new Pilsa(
+                request.getTitle(),
+                member,
+                request.getAuthor(),
+                request.getPublisher(),
+                request.getTextContents(),
+                request.getBackgroundImageUrl(),
+                request.getBackgroundColor(),
+                getPilsaImages(request.getImages()));
 
         List<RelationPilsaCategory> relationPilsaCategories = categoryList.stream()
                 .map(category -> new RelationPilsaCategory(pilsa, category)) // 생성자를 통해 RelationPilsaCategory 인스턴스 생성
@@ -76,6 +77,12 @@ public class PilsaService {
         pilsa.setRelationPilsaCategories(relationPilsaCategories);
 
         return pilsaRepository.save(pilsa);
+    }
+
+    private void validationCategoryCount(List<Long> categoryCd) {
+        if (!categoryCd.isEmpty() && categoryCd.size() > 3) {
+            throw new BadRequestException(ExceptionCode.MAX_CATEGORY_SIZE);
+        }
     }
 
     private List<PilsaImage> getPilsaImages(List<ImageRequest> imageRequests) {

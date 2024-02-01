@@ -5,6 +5,8 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import potenday.pilsa.global.exception.BadRequestException;
+import potenday.pilsa.global.exception.ExceptionCode;
 import potenday.pilsa.member.domain.Member;
 import potenday.pilsa.pilsaCategory.domain.PilsaCategory;
 import potenday.pilsa.pilsaImage.domain.PilsaImage;
@@ -78,7 +80,9 @@ public class Pilsa {
     private LocalDateTime updateDate;
 
     @Builder
-    public Pilsa(String title, Member member,String author, String publisher, String textContents, String backgroundImageUrl, String backgroundColor, List<PilsaImage> images, List<RelationPilsaCategory> pilsaCategory) {
+    public Pilsa(String title, Member member,String author, String publisher, String textContents, String backgroundImageUrl, String backgroundColor, List<PilsaImage> images) {
+        validationContent(images, textContents);
+
         this.title = title;
         this.member = member;
         this.author = author;
@@ -89,7 +93,6 @@ public class Pilsa {
         this.backgroundColor = backgroundColor;
         this.backgroundImageUrl = backgroundImageUrl;
         this.pilsaImages = images;
-        this.relationPilsaCategories = pilsaCategory;
         this.registDate = LocalDateTime.now();
 
         if (!images.isEmpty()) {
@@ -99,11 +102,16 @@ public class Pilsa {
         }
     }
 
-
     public void setRelationPilsaCategories(List<RelationPilsaCategory> relationPilsaCategories) {
         this.relationPilsaCategories = relationPilsaCategories;
         for (RelationPilsaCategory relation : relationPilsaCategories) {
             relation.setPilsa(this);
+        }
+    }
+
+    private void validationContent(List<PilsaImage> images, String textContents) {
+        if (images.isEmpty() && textContents.isBlank()) {
+            throw new BadRequestException(ExceptionCode.NOT_INPUT_CONTENT);
         }
     }
 }
