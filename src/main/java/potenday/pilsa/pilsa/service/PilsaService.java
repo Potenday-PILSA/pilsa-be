@@ -1,6 +1,7 @@
 package potenday.pilsa.pilsa.service;
 
 import lombok.RequiredArgsConstructor;
+import lombok.ToString;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -27,6 +28,7 @@ import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
+@ToString
 public class PilsaService {
 
     private final PilsaRepository pilsaRepository;
@@ -35,22 +37,18 @@ public class PilsaService {
 
     @Transactional(readOnly = true)
     public ResponsePilsaMainListDto getAllPilsalList(RequestPageDto request) {
+        Page<Pilsa> pilsas = pilsaRepository.findByPrivateTypeOrderByRegistDateDesc(YN.N, request.toPageable());
 
-        Page<Pilsa> pilsas = pilsaRepository.findByPrivateTypeOrderByRegistDateDesc(YN.N, request.pageable());
-        List<Pilsa> pilsaList = pilsaRepository.findAll();
-
-        return ResponsePilsaMainListDto.from(pilsas, pilsaList);
+        return ResponsePilsaMainListDto.from(pilsas);
     }
 
     @Transactional(readOnly = true)
     public ResponsePilsaMainListDto getPilsalListOfMember(Long memberId, RequestPageDto request) {
-
         Member member = getMember(memberId);
 
-        Page<Pilsa> pilsas = pilsaRepository.findByMember_IdOrderByRegistDateDesc(member.getId(), request.pageable());
-        List<Pilsa> pilsaList = pilsaRepository.findAll();
+        Page<Pilsa> pilsas = pilsaRepository.findByMember_IdOrderByRegistDateDesc(member.getId(), request.toPageable());
 
-        return ResponsePilsaMainListDto.from(pilsas, pilsaList);
+        return ResponsePilsaMainListDto.from(pilsas);
     }
 
 

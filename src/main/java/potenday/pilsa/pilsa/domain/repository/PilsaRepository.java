@@ -16,5 +16,7 @@ public interface PilsaRepository extends JpaRepository<Pilsa, Long> {
 
     Page<Pilsa> findByPrivateTypeOrderByRegistDateDesc(YN privateType, Pageable pageable);
 
+    Page<Pilsa> findByOrderByRegistDateDesc(Pageable pageable);
+
     Page<Pilsa> findByMember_IdOrderByRegistDateDesc(Long memberId, Pageable pageable);
 }

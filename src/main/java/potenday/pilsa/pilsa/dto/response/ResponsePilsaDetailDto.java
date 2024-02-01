@@ -73,6 +73,8 @@ public class ResponsePilsaDetailDto {
                 .map(ResponseImagetDto::from)
                 .toList();
 
+        System.out.println("pilsa.getPilsaId() = " + pilsa.getPilsaId());
+
         return ResponsePilsaDetailDto.builder()
                 .pilsaId(pilsa.getPilsaId())
                 .title(pilsa.getTitle())

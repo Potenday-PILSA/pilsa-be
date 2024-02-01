@@ -1,12 +1,8 @@
 package potenday.pilsa.global.dto.request;
 
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import org.springframework.data.domain.Pageable;
 
-import static lombok.AccessLevel.PROTECTED;
 import static org.springframework.data.domain.PageRequest.of;
 
 @Getter
@@ -17,7 +13,7 @@ public class RequestPageDto {
     private Integer page;
     private Integer size;
 
-    public Pageable pageable() {
+    public Pageable toPageable() {
         return of(page, size);
     }
 
