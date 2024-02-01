@@ -14,7 +14,7 @@ public class RequestPageDto {
     private Integer page;
     private Integer size;
 
-    public Pageable toPageable() {
+    public Pageable pageable() {
         return of(page, size);
     }
 

@@ -6,6 +6,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import potenday.pilsa.member.domain.Member;
+import potenday.pilsa.pilsaCategory.domain.PilsaCategory;
 import potenday.pilsa.pilsaImage.domain.PilsaImage;
 import potenday.pilsa.relationPilsaCategory.domain.RelationPilsaCategory;
 
@@ -27,9 +28,9 @@ public class Pilsa {
     private Member member;
 
     // 필사 카테코리
-    @ManyToOne(cascade = CascadeType.DETACH, fetch = FetchType.LAZY)
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn(name = "id")
-    private RelationPilsaCategory pilsaCategory;
+    List<RelationPilsaCategory> relationPilsaCategories;
 
     // 제목
     @Column
@@ -79,8 +80,9 @@ public class Pilsa {
     private LocalDateTime updateDate;
 
     @Builder
-    public Pilsa(String title, String author, String publisher, YN privateType, Long followPilsaId, String textContents, String backgroundImageUrl, String backgroundColor, List<PilsaImage> images, RelationPilsaCategory pilsaCategory) {
+    public Pilsa(String title, Member member,String author, String publisher, YN privateType, Long followPilsaId, String textContents, String backgroundImageUrl, String backgroundColor, List<PilsaImage> images, List<RelationPilsaCategory> pilsaCategory) {
         this.title = title;
+        this.member = member;
         this.author = author;
         this.publisher = publisher;
         this.privateType = privateType;
@@ -89,7 +91,14 @@ public class Pilsa {
         this.backgroundColor = backgroundColor;
         this.backgroundImageUrl = backgroundImageUrl;
         this.pilsaImages = images;
-        this.pilsaCategory = pilsaCategory;
+        this.relationPilsaCategories = pilsaCategory;
     }
 
+
+    public void setRelationPilsaCategories(List<RelationPilsaCategory> relationPilsaCategories) {
+        this.relationPilsaCategories = relationPilsaCategories;
+        for (RelationPilsaCategory relation : relationPilsaCategories) {
+            relation.setPilsa(this);
+        }
+    }
 }

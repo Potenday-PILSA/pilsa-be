@@ -7,7 +7,6 @@ import potenday.pilsa.pilsaCategory.domain.PilsaCategory;
 import java.util.List;
 
 @Getter
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class ResponseCategoryDto {
 
         @Schema(description = "카테고리 코드")
