@@ -22,10 +22,9 @@ public class PilsaCategoryController {
     @GetMapping
     public ResponseEntity<ResponseCategoryListDto> getPilsaCategoryList() {
 
-        // Response - ResponseCategoryListDto
-        // TODO: 서비스 기능 구현
+        ResponseCategoryListDto categoryListDto = pilsaCategoryService.getPilsaCategoryList();
 
-        return ResponseEntity.ok(null);
+        return ResponseEntity.ok(categoryListDto);
     }
 
 }
