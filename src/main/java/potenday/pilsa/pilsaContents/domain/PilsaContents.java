@@ -1,3 +1,4 @@
+/*
 package potenday.pilsa.pilsaContents.domain;
 
 import jakarta.persistence.*;
@@ -38,3 +39,4 @@ public class PilsaContents {
 
     private LocalDateTime updateDate;
 }
+*/

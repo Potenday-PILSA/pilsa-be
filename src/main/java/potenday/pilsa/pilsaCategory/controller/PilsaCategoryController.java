@@ -7,6 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import potenday.pilsa.pilsaCategory.dto.response.ResponseCategoryListDto;
 import potenday.pilsa.pilsaCategory.service.PilsaCategoryService;
 
 @Tag(name = "필사 카테고리 Controller")
@@ -19,7 +20,10 @@ public class PilsaCategoryController {
 
     @Operation(summary = "필사 카테고리 리스트 조회", description = "")
     @GetMapping
-    public ResponseEntity<?> getPilsaCategoryList() {
+    public ResponseEntity<ResponseCategoryListDto> getPilsaCategoryList() {
+
+        // Response - ResponseCategoryListDto
+        // TODO: 서비스 기능 구현
 
         return ResponseEntity.ok(null);
     }

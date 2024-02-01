@@ -18,13 +18,11 @@ public class RelationPilsaCategory {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    // 필사 ID
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @JoinColumn(name = "id")
-    List<Pilsa> pilsaList;
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "pilsa_id")
+    private Pilsa pilsa;
 
-    // 카테고리 ID
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @JoinColumn(name = "id")
-    List<PilsaCategory> categoryList;
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "category_cd")
+    private PilsaCategory category;
 }
