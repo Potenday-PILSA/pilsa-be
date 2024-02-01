@@ -53,9 +53,10 @@ public class PilsaController {
     public ResponseEntity<ResponsePilsaDetailDto> getPilsaDetail(
             @PathVariable Long pilsaId) {
         // Response - ResponsePilsaDetailDto
-        // TODO: 서비스 기능 구현
 
-        return ResponseEntity.ok(null);
+        ResponsePilsaDetailDto pilsaDetail =  pilsaService.getPilsaInfo(pilsaId);
+
+        return ResponseEntity.ok(pilsaDetail);
     }
 
 

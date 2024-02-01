@@ -14,6 +14,7 @@ import potenday.pilsa.pilsa.domain.Pilsa;
 import potenday.pilsa.pilsa.domain.YN;
 import potenday.pilsa.pilsa.domain.repository.PilsaRepository;
 import potenday.pilsa.pilsa.dto.request.RequestPilsaInfoDto;
+import potenday.pilsa.pilsa.dto.response.ResponsePilsaDetailDto;
 import potenday.pilsa.pilsa.dto.response.ResponsePilsaMainListDto;
 import potenday.pilsa.pilsaCategory.domain.PilsaCategory;
 import potenday.pilsa.pilsaCategory.domain.repository.PilsaCategoryRepository;
@@ -79,10 +80,23 @@ public class PilsaService {
         return pilsaRepository.save(pilsa);
     }
 
+    public ResponsePilsaDetailDto getPilsaInfo(Long pilsaId) {
+
+        Pilsa pilsa = getPilsa(pilsaId);
+        List<Pilsa> pilsaList = pilsaRepository.findAll();
+
+        return ResponsePilsaDetailDto.from(pilsa, pilsaList);
+    }
 
     private Member getMember(Long memberId) {
         return memberRepository.findByIdAndStatus(memberId, Status.ACTIVE).orElseThrow(
                 () -> new BadRequestException(ExceptionCode.NOT_FOUND_MEMBER)
+        );
+    }
+
+    private Pilsa getPilsa(Long pilsaId) {
+        return pilsaRepository.findByPilsaId(pilsaId).orElseThrow(
+                () -> new BadRequestException(ExceptionCode.NOT_FOUND_PILSA)
         );
     }
 }
