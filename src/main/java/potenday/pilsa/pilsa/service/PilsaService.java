@@ -14,6 +14,7 @@ import potenday.pilsa.pilsa.domain.Pilsa;
 import potenday.pilsa.pilsa.domain.YN;
 import potenday.pilsa.pilsa.domain.repository.PilsaRepository;
 import potenday.pilsa.pilsa.dto.request.RequestPilsaInfoDto;
+import potenday.pilsa.pilsa.dto.response.ResponsePilsaDetailDto;
 import potenday.pilsa.pilsa.dto.response.ResponsePilsaMainListDto;
 import potenday.pilsa.pilsaCategory.domain.PilsaCategory;
 import potenday.pilsa.pilsaCategory.domain.repository.PilsaCategoryRepository;
@@ -53,7 +54,7 @@ public class PilsaService {
     }
 
 
-    public Pilsa createPilsa(Long memberId, RequestPilsaInfoDto request) {
+    public ResponsePilsaDetailDto createPilsa(Long memberId, RequestPilsaInfoDto request) {
         validationCategoryCount(request.getCategoryCd());
 
         Member member = getMember(memberId);
@@ -75,8 +76,9 @@ public class PilsaService {
 
         // Pilsa에 RelationPilsaCategory 설정
         pilsa.setRelationPilsaCategories(relationPilsaCategories);
+        pilsaRepository.save(pilsa);
 
-        return pilsaRepository.save(pilsa);
+        return ResponsePilsaDetailDto.from(pilsa);
     }
 
     private void validationCategoryCount(List<Long> categoryCd) {

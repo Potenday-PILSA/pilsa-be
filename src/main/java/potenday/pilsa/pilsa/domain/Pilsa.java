@@ -8,7 +8,6 @@ import lombok.NoArgsConstructor;
 import potenday.pilsa.global.exception.BadRequestException;
 import potenday.pilsa.global.exception.ExceptionCode;
 import potenday.pilsa.member.domain.Member;
-import potenday.pilsa.pilsaCategory.domain.PilsaCategory;
 import potenday.pilsa.pilsaImage.domain.PilsaImage;
 import potenday.pilsa.relationPilsaCategory.domain.RelationPilsaCategory;
 

@@ -1,12 +1,15 @@
 package potenday.pilsa.member.dto.response;
 
 import io.swagger.v3.oas.annotations.media.Schema;
+import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import potenday.pilsa.member.domain.Member;
 import potenday.pilsa.member.domain.Status;
 
 @Getter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class MemberInfoResponse {
     @Schema(description = "회원 ID")
     private Long id;

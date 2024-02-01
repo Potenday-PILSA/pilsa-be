@@ -1,12 +1,14 @@
 package potenday.pilsa.pilsaCategory.dto.response;
 
 import io.swagger.v3.oas.annotations.media.Schema;
-import lombok.*;
+import lombok.AccessLevel;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 import potenday.pilsa.pilsaCategory.domain.PilsaCategory;
 
-import java.util.List;
-
 @Getter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class ResponseCategoryDto {
 
         @Schema(description = "카테고리 코드")

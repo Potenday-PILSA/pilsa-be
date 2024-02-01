@@ -3,14 +3,9 @@ package potenday.pilsa.pilsa.dto.response;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Builder;
 import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
 import org.springframework.data.domain.Page;
 import potenday.pilsa.pilsa.domain.Pilsa;
-import potenday.pilsa.pilsa.domain.YN;
-import potenday.pilsa.pilsaCategory.dto.response.ResponseCategoryDto;
 
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -38,13 +33,4 @@ public class ResponsePilsaMainListDto {
                 .pilsaLists(pilsaMainList)
                 .build();
     }
-
-/*    public static ResponsePilsaMainListDto from(Page<Pilsa> pilsaList) {
-        List<ResponsePilsaMainDto> pilsaMainList = pilsaList.stream()
-                .map(ResponsePilsaMainDto::from).collect(Collectors.toList());
-
-        return ResponsePilsaMainListDto.builder()
-                .pilsaLists(pilsaMainList)
-                .build();
-    }*/
 }
