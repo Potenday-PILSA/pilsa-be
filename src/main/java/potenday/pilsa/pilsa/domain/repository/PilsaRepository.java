@@ -7,9 +7,11 @@ import potenday.pilsa.pilsa.domain.Pilsa;
 import potenday.pilsa.pilsa.domain.YN;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface PilsaRepository extends JpaRepository<Pilsa, Long> {
 
+    Optional<Pilsa> findByPilsaId(Long pilsaId);
     List<Pilsa> findByMember_Id(Long id);
 
     Page<Pilsa> findByPrivateTypeOrderByRegistDateDesc(YN privateType, Pageable pageable);
