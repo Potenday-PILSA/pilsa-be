@@ -65,7 +65,6 @@ public class Member {
         this.description = null;
         this.profileImageUrl = DEFAULT_IMAGE;
         this.profileNickName = DELETED_MEMBER_NICKNAME;
-        this.registDate = LocalDateTime.now();
     }
 
 }
