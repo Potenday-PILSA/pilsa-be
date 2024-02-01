@@ -2,29 +2,28 @@ package potenday.pilsa.pilsaCategory.dto.response;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
-import potenday.pilsa.pilsa.dto.request.RequestPilsaInfoDto;
+import potenday.pilsa.pilsaCategory.domain.PilsaCategory;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Getter
-@Builder
-@AllArgsConstructor
-@NoArgsConstructor
 public class ResponseCategoryListDto {
 
     @Schema(description = "카테고리 리스트")
-    private List<Category> categories;
+    private List<ResponseCategoryDto> categories;
 
-    @Getter
-    @Setter
-    @ToString
-    private class Category {
+        @Builder
+        public ResponseCategoryListDto(List<ResponseCategoryDto> categories) {
+                this.categories = categories;
+        }
 
-        @Schema(description = "카테고리 코드")
-        private Long categoryCd;
-        @Schema(description = "카테고리 명")
-        private String categoryName;
-        @Schema(description = "카테고리 설명")
-        private String description;
-    }
+        public static ResponseCategoryListDto from(List<PilsaCategory> pilsaCategoryList) {
+                List<ResponseCategoryDto> categoryList = pilsaCategoryList.stream()
+                        .map(ResponseCategoryDto::from).collect(Collectors.toList());
+
+                return ResponseCategoryListDto.builder()
+                        .categories(categoryList)
+                        .build();
+        }
 }

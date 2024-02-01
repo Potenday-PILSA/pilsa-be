@@ -3,5 +3,8 @@ package potenday.pilsa.pilsa.domain.repository;
 import org.springframework.data.jpa.repository.JpaRepository;
 import potenday.pilsa.pilsa.domain.Pilsa;
 
+import java.util.List;
+
 public interface PilsaRepository extends JpaRepository<Pilsa, Long> {
+    List<Pilsa> findByMember_Id(Long id);
 }

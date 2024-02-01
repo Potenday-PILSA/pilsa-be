@@ -4,7 +4,12 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import potenday.pilsa.pilsa.domain.repository.PilsaRepository;
+import potenday.pilsa.pilsaCategory.domain.PilsaCategory;
+import potenday.pilsa.pilsaCategory.domain.YN;
 import potenday.pilsa.pilsaCategory.domain.repository.PilsaCategoryRepository;
+import potenday.pilsa.pilsaCategory.dto.response.ResponseCategoryListDto;
+
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -12,5 +17,13 @@ import potenday.pilsa.pilsaCategory.domain.repository.PilsaCategoryRepository;
 public class PilsaCategoryService {
 
     private final PilsaCategoryRepository pilsaCategoryRepository;
+
+    public ResponseCategoryListDto getPilsaCategoryList() {
+
+        List<PilsaCategory> categoryList = pilsaCategoryRepository.findByUseYn(YN.Y);
+
+        return ResponseCategoryListDto.from(categoryList);
+    }
+
 }
 
