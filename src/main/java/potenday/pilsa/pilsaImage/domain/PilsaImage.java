@@ -5,9 +5,6 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import potenday.pilsa.pilsa.domain.Pilsa;
-import potenday.pilsa.relationPilsaCategory.domain.RelationPilsaCategory;
-
-import java.time.LocalDateTime;
 
 @Entity
 @Getter
@@ -35,5 +32,11 @@ public class PilsaImage {
     @ManyToOne(cascade = CascadeType.DETACH, fetch = FetchType.LAZY)
     @JoinColumn(name = "pilsaId")
     private Pilsa pilsa;
+
+    public PilsaImage(String imageUrl, YN thumbnail, Integer imageSeq) {
+        this.imageUrl = imageUrl;
+        this.thumbnail = thumbnail;
+        this.imageSeq = imageSeq;
+    }
 
 }

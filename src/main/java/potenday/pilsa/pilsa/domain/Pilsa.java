@@ -28,8 +28,7 @@ public class Pilsa {
     private Member member;
 
     // 필사 카테코리
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @JoinColumn(name = "id")
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "pilsa")
     List<RelationPilsaCategory> relationPilsaCategories;
 
     // 제목
@@ -71,8 +70,7 @@ public class Pilsa {
     private String backgroundColor;
 
     // 필사 이미지
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @JoinColumn(name = "pilsaId")
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "pilsa")
     List<PilsaImage> pilsaImages;
 
     private LocalDateTime registDate;
@@ -80,18 +78,25 @@ public class Pilsa {
     private LocalDateTime updateDate;
 
     @Builder
-    public Pilsa(String title, Member member,String author, String publisher, YN privateType, Long followPilsaId, String textContents, String backgroundImageUrl, String backgroundColor, List<PilsaImage> images, List<RelationPilsaCategory> pilsaCategory) {
+    public Pilsa(String title, Member member,String author, String publisher, String textContents, String backgroundImageUrl, String backgroundColor, List<PilsaImage> images, List<RelationPilsaCategory> pilsaCategory) {
         this.title = title;
         this.member = member;
         this.author = author;
         this.publisher = publisher;
-        this.privateType = privateType;
-        this.followPilsaId = followPilsaId;
+        this.privateType = YN.N; // TODO : 아직 기능 X
+//        this.followPilsaId = followPilsaId; TODO : 아직 기능 없음
         this.textContents = textContents;
         this.backgroundColor = backgroundColor;
         this.backgroundImageUrl = backgroundImageUrl;
         this.pilsaImages = images;
         this.relationPilsaCategories = pilsaCategory;
+        this.registDate = LocalDateTime.now();
+
+        if (!images.isEmpty()) {
+            this.status = (textContents != null) ? Status.ALL : Status.IMG;
+        } else {
+            this.status = Status.TXT;
+        }
     }
 
 

@@ -17,6 +17,8 @@ import potenday.pilsa.pilsa.dto.request.RequestPilsaInfoDto;
 import potenday.pilsa.pilsa.dto.response.ResponsePilsaMainListDto;
 import potenday.pilsa.pilsaCategory.domain.PilsaCategory;
 import potenday.pilsa.pilsaCategory.domain.repository.PilsaCategoryRepository;
+import potenday.pilsa.pilsaImage.domain.PilsaImage;
+import potenday.pilsa.pilsaImage.dto.request.ImageRequest;
 import potenday.pilsa.relationPilsaCategory.domain.RelationPilsaCategory;
 
 import java.util.List;
@@ -52,7 +54,6 @@ public class PilsaService {
 
 
     public Pilsa createPilsa(Long memberId, RequestPilsaInfoDto request) {
-
         Member member = getMember(memberId);
         List<PilsaCategory> categoryList = pilsaCategoryRepository.findByCategoryCdIn(request.getCategoryCd());
 
@@ -61,12 +62,10 @@ public class PilsaService {
                         .member(member)
                         .author(request.getAuthor())
                         .publisher(request.getPublisher())
-                        .privateType(request.getPrivateType())
-                        .followPilsaId(request.getFollowPilsaId())
                         .textContents(request.getTextContents())
                         .backgroundColor(request.getBackgroundColor())
                         .backgroundImageUrl(request.getBackgroundImageUrl())
-                        .images(null)
+                        .images(getPilsaImages(request.getImages()))
                         .build();
 
         List<RelationPilsaCategory> relationPilsaCategories = categoryList.stream()
@@ -79,6 +78,11 @@ public class PilsaService {
         return pilsaRepository.save(pilsa);
     }
 
+    private List<PilsaImage> getPilsaImages(List<ImageRequest> imageRequests) {
+        return imageRequests.stream()
+                .map(image -> new PilsaImage(image.getImageUrl(), image.getThumbnail(), image.getImageSeq()))
+                .collect(Collectors.toList());
+    }
 
     private Member getMember(Long memberId) {
         return memberRepository.findByIdAndStatus(memberId, Status.ACTIVE).orElseThrow(
