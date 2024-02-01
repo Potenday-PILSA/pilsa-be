@@ -4,6 +4,8 @@ import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import potenday.pilsa.pilsa.domain.Pilsa;
+import potenday.pilsa.relationPilsaCategory.domain.RelationPilsaCategory;
 
 import java.time.LocalDateTime;
 
@@ -28,5 +30,10 @@ public class PilsaImage {
     // 이미지 순서
     @Column
     private Integer imageSeq;
+
+    // 필사 정보
+    @ManyToOne(cascade = CascadeType.DETACH, fetch = FetchType.LAZY)
+    @JoinColumn(name = "pilsaId")
+    private Pilsa pilsa;
 
 }

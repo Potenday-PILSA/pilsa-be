@@ -5,76 +5,46 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+import org.springframework.data.domain.Page;
+import potenday.pilsa.pilsa.domain.Pilsa;
 import potenday.pilsa.pilsa.domain.YN;
+import potenday.pilsa.pilsaCategory.dto.response.ResponseCategoryDto;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Getter
-@Setter
-@ToString
-@Builder
 public class ResponsePilsaMainListDto {
 
-    private List<PilsaList> pilsaLists;
+    @Schema(description = "전체 개수")
+    private Long totalCount;
+    @Schema(description = "메인화면 필사 리스트")
+    private List<ResponsePilsaMainDto> pilsaLists;
 
-    @Getter
-    @Setter
-    @ToString
     @Builder
-    public static class PilsaList {
-
-        @Schema(description = "필사 ID")
-        private Long pilsaId;
-        @Schema(description = "필사 작성 회원 ID")
-        private Long memberId;
-        @Schema(description = "필사 작성 프로밍 닉네임")
-        private String profileNickName;
-        @Schema(description = "제목")
-        private String title;
-
-        @Schema(description = "카테고리 리스트")
-        private List<CategoryList> categoryLists;
-
-        @Schema(description = "저자")
-        private String author;
-        @Schema(description = "출판사")
-        private String publisher;
-        @Schema(description = "나만보기 여부")
-        private YN privateType;
-
-        @Schema(description = "상위 필사 ID")
-        private Long followPilsaId;
-        @Schema(description = "상위 필사 제목")
-        private String followPilsaTitle;
-        @Schema(description = "상위 필사 작성 회원 ID")
-        private Long followMemberId;
-        @Schema(description = "상위 필사 작성 프로밍 닉네임")
-        private String followProfileNickName;
-
-        @Schema(description = "콘텐츠 문구")
-        private String textContents;
-        @Schema(description = "배경 이미지 url")
-        private String backgroundImageUrl;
-        @Schema(description = "배경 이미지 색상")
-        private String backgroundColor;
-        @Schema(description = "등록일자")
-        private LocalDateTime registDate;
-        @Schema(description = "수정일자")
-        private LocalDateTime updateDate;
-
-        @Getter
-        @Setter
-        @ToString
-        @Builder
-        public static class CategoryList {
-            @Schema(description = "카테고리 코드")
-            private Long categoryCd;
-            @Schema(description = "카테고리 명")
-            private String categoryName;
-            @Schema(description = "카테고리 설명")
-            private String categoryDescription;
-        }
-
+    public ResponsePilsaMainListDto(Long totalCount, List<ResponsePilsaMainDto> pilsaLists) {
+        this.totalCount = totalCount;
+        this.pilsaLists = pilsaLists;
     }
+
+    public static ResponsePilsaMainListDto from(Page<Pilsa> pilsaPage, List<Pilsa> allPilsas) {
+        List<ResponsePilsaMainDto> pilsaMainList = pilsaPage.getContent().stream()
+                .map(pilsa -> ResponsePilsaMainDto.from(pilsa, allPilsas))
+                .collect(Collectors.toList());
+
+        return ResponsePilsaMainListDto.builder()
+                .totalCount(pilsaPage.getTotalElements())
+                .pilsaLists(pilsaMainList)
+                .build();
+    }
+
+/*    public static ResponsePilsaMainListDto from(Page<Pilsa> pilsaList) {
+        List<ResponsePilsaMainDto> pilsaMainList = pilsaList.stream()
+                .map(ResponsePilsaMainDto::from).collect(Collectors.toList());
+
+        return ResponsePilsaMainListDto.builder()
+                .pilsaLists(pilsaMainList)
+                .build();
+    }*/
 }

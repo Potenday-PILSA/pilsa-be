@@ -9,6 +9,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import potenday.pilsa.login.Auth;
+import potenday.pilsa.pilsaCategory.dto.response.ResponseCategoryListDto;
+import potenday.pilsa.pilsaImage.dto.response.ResponseImageListDto;
 import potenday.pilsa.pilsaImage.service.PilsaImageService;
 
 @Tag(name = "필사 이미지 Controller")
@@ -25,10 +27,9 @@ public class PilsaImageController {
     public ResponseEntity<?> getPilsaImageList(
             @Parameter(hidden = true) @Auth Long memberId
     ) {
-        // Response - ResponseCategoryListDto
-        // TODO: 서비스 기능 구현
+        ResponseImageListDto pilsaCategoryList = pilsaImageService.getPilsaImageList(memberId);
 
-        return ResponseEntity.ok(null);
+        return ResponseEntity.ok(pilsaCategoryList);
     }
 
 }

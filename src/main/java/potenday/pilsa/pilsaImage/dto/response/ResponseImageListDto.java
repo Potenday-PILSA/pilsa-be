@@ -4,29 +4,29 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
 import potenday.pilsa.pilsa.domain.YN;
 import potenday.pilsa.pilsa.dto.request.RequestPilsaInfoDto;
+import potenday.pilsa.pilsaImage.domain.PilsaImage;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Getter
-@Builder
-@AllArgsConstructor
-@NoArgsConstructor
 public class ResponseImageListDto {
 
     @Schema(description = "이미지 정보 리스트")
-    private List<Images> images;
+    private List<ResponseImagetDto> images;
 
-    @Getter
-    @Setter
-    @ToString
-    private class Images {
-
-        @Schema(description = "이미지 url")
-        private String imageUrl;
-        @Schema(description = "대표 이미지 여부(이미지 여러개중 한개만 Y여아함)")
-        private YN thumbnail;
-        @Schema(description = "이미지 순서")
-        private Integer imageSeq;
-
+    @Builder
+    public ResponseImageListDto(List<ResponseImagetDto> images) {
+        this.images = images;
     }
+
+    public static ResponseImageListDto from(List<PilsaImage> pilsaImageList) {
+        List<ResponseImagetDto> imageList = pilsaImageList.stream()
+                .map(ResponseImagetDto::from).collect(Collectors.toList());
+
+        return ResponseImageListDto.builder()
+                .images(imageList)
+                .build();
+    }
+
 }
