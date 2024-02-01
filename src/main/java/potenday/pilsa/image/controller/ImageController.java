@@ -1,5 +1,6 @@
 package potenday.pilsa.image.controller;
 
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.persistence.criteria.CriteriaBuilder;
 import lombok.RequiredArgsConstructor;
@@ -22,6 +23,7 @@ import java.util.List;
 public class ImageController {
     private final ImageUtil imageUtil;
 
+    @Operation(summary = "이미지 파일을 업로드 하면 ImageUrl 이 생성 되는 API MultipartFile form-data 로 보내주세요 이미지는 여러장 업로드 가능합니다.")
     @PostMapping("")
     public ResponseEntity<List<ImageResponse>> uploadImage(
             @RequestPart(name = "files") List<MultipartFile> files) {
