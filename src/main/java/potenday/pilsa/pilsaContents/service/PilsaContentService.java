@@ -1,3 +1,4 @@
+/*
 package potenday.pilsa.pilsaContents.service;
 
 import lombok.RequiredArgsConstructor;
@@ -13,3 +14,4 @@ public class PilsaContentService {
     private final PilsaContentsRepository pilsaContentRepository;
 }
 
+*/

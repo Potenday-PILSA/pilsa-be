@@ -1,3 +1,4 @@
+/*
 package potenday.pilsa.pilsaContents.controller;
 
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -15,3 +16,4 @@ public class PilsaContentsController {
     private final PilsaContentService pilsaContentService;
 
 }
+*/
