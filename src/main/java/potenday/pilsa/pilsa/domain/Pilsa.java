@@ -28,8 +28,7 @@ public class Pilsa {
     private Member member;
 
     // 필사 카테코리
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @JoinColumn(name = "pilsaIdCategory")
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "pilsa")
     List<RelationPilsaCategory> relationPilsaCategories;
 
     // 제목
