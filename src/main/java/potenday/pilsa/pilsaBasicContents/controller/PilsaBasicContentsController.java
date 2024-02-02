@@ -42,11 +42,20 @@ public class PilsaBasicContentsController {
         return ResponseEntity.ok(pilsaMainListDto);
     }
 
+    @Operation(summary = "랜덤한 기본제공 필사 정보 조회")
+    @GetMapping("category")
+    public ResponseEntity<ResponseBasicPilsaDto> getBasicPilsaRandom() {
+
+        ResponseBasicPilsaDto responseBasicPilsaDto = pilsaBasicContentService.getPilsaInfoRandom();
+
+        return ResponseEntity.ok(responseBasicPilsaDto);
+    }
+
     @Operation(summary = "카테고리별 랜덤한 기본제공 필사 정보 조회")
     @GetMapping("category/{categoryCd}")
-    public ResponseEntity<ResponseBasicPilsaDto> getBasicPilsaOfCategoryCd(@PathVariable Long categoryCd) {
+    public ResponseEntity<ResponseBasicPilsaDto> getBasicPilsaRandomOfCategoryCd(@PathVariable Long categoryCd) {
 
-        ResponseBasicPilsaDto responseBasicPilsaDto = pilsaBasicContentService.getPilsaInfo(categoryCd);
+        ResponseBasicPilsaDto responseBasicPilsaDto = pilsaBasicContentService.getPilsaInfoOfCategoryCd(categoryCd);
 
         return ResponseEntity.ok(responseBasicPilsaDto);
     }

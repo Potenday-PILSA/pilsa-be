@@ -37,7 +37,7 @@ public class PilsaBasicContentService {
         return ResponseBasicPilsaListDto.from(pilsas);
     }
 
-    public ResponseBasicPilsaDto getPilsaInfo(Long categoryCd) {
+    public ResponseBasicPilsaDto getPilsaInfoOfCategoryCd(Long categoryCd) {
 
         List<PilsaBasicContents> basicContents = pilsaBasicContentsRepository.findByCategoryCd(categoryCd);
 
@@ -45,6 +45,17 @@ public class PilsaBasicContentService {
             // 적절한 예외 처리
             throw new EntityNotFoundException("No contents found for category ID " + categoryCd);
         }
+
+        // 리스트에서 랜덤하게 하나의 요소 선택
+        PilsaBasicContents selectedContent = basicContents.get(new Random().nextInt(basicContents.size()));
+
+        // 선택된 PilsaBasicContents를 ResponseBasicPilsaDto로 변환
+        return ResponseBasicPilsaDto.from(selectedContent);
+    }
+
+    public ResponseBasicPilsaDto getPilsaInfoRandom() {
+
+        List<PilsaBasicContents> basicContents = pilsaBasicContentsRepository.findAll();
 
         // 리스트에서 랜덤하게 하나의 요소 선택
         PilsaBasicContents selectedContent = basicContents.get(new Random().nextInt(basicContents.size()));
