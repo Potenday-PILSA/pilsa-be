@@ -1,13 +1,13 @@
 package potenday.pilsa.pilsa.domain;
 
 import jakarta.persistence.*;
-import lombok.AccessLevel;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
+import potenday.pilsa.global.exception.BadRequestException;
+import potenday.pilsa.global.exception.ExceptionCode;
 import potenday.pilsa.member.domain.Member;
-import potenday.pilsa.pilsaCategory.domain.PilsaCategory;
+import potenday.pilsa.pilsa.dto.request.RequestPilsaInfoDto;
 import potenday.pilsa.pilsaImage.domain.PilsaImage;
+import potenday.pilsa.pilsaImage.dto.request.ImageRequest;
 import potenday.pilsa.relationPilsaCategory.domain.RelationPilsaCategory;
 
 import java.time.LocalDateTime;
@@ -28,9 +28,8 @@ public class Pilsa {
     private Member member;
 
     // 필사 카테코리
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @JoinColumn(name = "id")
-    List<RelationPilsaCategory> relationPilsaCategories;
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "pilsa")
+    private List<RelationPilsaCategory> relationPilsaCategories;
 
     // 제목
     @Column
@@ -71,34 +70,78 @@ public class Pilsa {
     private String backgroundColor;
 
     // 필사 이미지
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @JoinColumn(name = "pilsaId")
-    List<PilsaImage> pilsaImages;
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "pilsa")
+    private List<PilsaImage> pilsaImages;
 
     private LocalDateTime registDate;
 
     private LocalDateTime updateDate;
 
+    private LocalDateTime deleteDate;
+
     @Builder
-    public Pilsa(String title, Member member,String author, String publisher, YN privateType, Long followPilsaId, String textContents, String backgroundImageUrl, String backgroundColor, List<PilsaImage> images, List<RelationPilsaCategory> pilsaCategory) {
+    public Pilsa(String title, Member member,String author, String publisher, String textContents, String backgroundImageUrl, String backgroundColor, RequestPilsaInfoDto requestPilsaInfoDto) {
+        validationContent(requestPilsaInfoDto.getImages(), textContents);
+
         this.title = title;
         this.member = member;
         this.author = author;
         this.publisher = publisher;
-        this.privateType = privateType;
-        this.followPilsaId = followPilsaId;
+        this.privateType = YN.N; // TODO : 아직 기능 X
+//        this.followPilsaId = followPilsaId; TODO : 아직 기능 없음
         this.textContents = textContents;
         this.backgroundColor = backgroundColor;
         this.backgroundImageUrl = backgroundImageUrl;
-        this.pilsaImages = images;
-        this.relationPilsaCategories = pilsaCategory;
+        this.registDate = LocalDateTime.now();
+
+        if (!requestPilsaInfoDto.getImages().isEmpty()) {
+            this.status = (textContents != null) ? Status.ALL : Status.IMG;
+        } else {
+            this.status = Status.TXT;
+        }
     }
 
+    public void updatePilsa(RequestPilsaInfoDto requestPilsaInfoDto) {
+        this.title = requestPilsaInfoDto.getTitle();
+        this.author = requestPilsaInfoDto.getAuthor();
+        this.publisher = requestPilsaInfoDto.getPublisher();
+        this.textContents = requestPilsaInfoDto.getTextContents();
+        this.backgroundColor = requestPilsaInfoDto.getBackgroundColor();
+        this.backgroundImageUrl = requestPilsaInfoDto.getBackgroundImageUrl();
+        this.updateDate = LocalDateTime.now();
+
+        this.getPilsaImages().clear();
+        this.getRelationPilsaCategories().clear();
+
+        if (!requestPilsaInfoDto.getImages().isEmpty()) {
+            this.status = (textContents != null) ? Status.ALL : Status.IMG;
+        } else {
+            this.status = Status.TXT;
+        }
+    }
 
     public void setRelationPilsaCategories(List<RelationPilsaCategory> relationPilsaCategories) {
         this.relationPilsaCategories = relationPilsaCategories;
         for (RelationPilsaCategory relation : relationPilsaCategories) {
             relation.setPilsa(this);
+        }
+    }
+
+    public void setCategories(List<RelationPilsaCategory> relationPilsaCategories) {
+        this.relationPilsaCategories = relationPilsaCategories;
+    }
+
+    public void setPilsaImages(List<PilsaImage> pilsaImages) {
+        this.pilsaImages = pilsaImages;
+    }
+
+    public void deletePilsa() {
+        this.deleteDate = LocalDateTime.now();
+    }
+
+    private void validationContent(List<ImageRequest> images, String textContents) {
+        if (images.isEmpty() && textContents.isBlank()) {
+            throw new BadRequestException(ExceptionCode.NOT_INPUT_CONTENT);
         }
     }
 }

@@ -4,15 +4,14 @@ import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 import potenday.pilsa.pilsa.domain.Pilsa;
-import potenday.pilsa.relationPilsaCategory.domain.RelationPilsaCategory;
-
-import java.time.LocalDateTime;
 
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "pilsaImage")
+@ToString
 public class PilsaImage {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -32,8 +31,15 @@ public class PilsaImage {
     private Integer imageSeq;
 
     // 필사 정보
-    @ManyToOne(cascade = CascadeType.DETACH, fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "pilsaId")
     private Pilsa pilsa;
+
+    public PilsaImage(String imageUrl, YN thumbnail, Integer imageSeq, Pilsa pilsa) {
+        this.imageUrl = imageUrl;
+        this.thumbnail = thumbnail;
+        this.imageSeq = imageSeq;
+        this.pilsa = pilsa;
+    }
 
 }

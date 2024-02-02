@@ -4,4 +4,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import potenday.pilsa.relationPilsaCategory.domain.RelationPilsaCategory;
 
 public interface RelationPilsaCategoryRepository extends JpaRepository<RelationPilsaCategory, Long> {
+    void deleteByPilsa_PilsaId(Long pilsa_pilsaId);
 }
