@@ -70,7 +70,7 @@ public class PilsaController {
     @Operation(summary = "필사 수정", description = "")
     @PutMapping("{pilsaId}")
     public ResponseEntity<?> updatePilsaInfo(
-            @Auth Long memberId,
+            @Parameter(hidden = true) @Auth Long memberId,
             @PathVariable("pilsaId") Long pilsaId,
             @RequestBody @Valid RequestPilsaInfoDto request) {
         ResponsePilsaDetailDto responsePilsaDetailDto = pilsaService.updatePilsa(memberId, request, pilsaId);
@@ -83,7 +83,7 @@ public class PilsaController {
     @Operation(summary = "필사 삭제", description = "")
     @DeleteMapping("{pilsaId}")
     public ResponseEntity<Void> deletePilsaInfo(
-            @PathVariable Long pilsaId,
+            @Parameter(hidden = true) @PathVariable Long pilsaId,
             @Auth Long memberId) {
         pilsaService.deletePilsa(pilsaId, memberId);
 

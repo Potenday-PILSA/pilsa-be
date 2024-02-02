@@ -13,6 +13,7 @@ public enum ExceptionCode {
 
     MAX_CATEGORY_SIZE(3001, "필사를 등록할때 카테고리는 최대 3개까지 선택할 수 있습니다."),
     NOT_INPUT_CONTENT(3002, "필사를 등록할때 필사 내용과 사진 중 하나는 필수로 등록해주세요."),
+    IMAGE_COUNT_MUST_ONE(3003, "필사를 등록할때 사진은 한장만 업로드 할 수 있습니다."),
 
     NOT_FOUND_PILSA_CATEGORY(2003, "필사카테고리를 찾을 수 없습니다."),
 

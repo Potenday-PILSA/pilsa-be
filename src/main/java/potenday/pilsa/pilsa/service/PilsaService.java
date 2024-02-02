@@ -94,6 +94,7 @@ public class PilsaService {
 
     public Pilsa pilsaSave(RequestPilsaInfoDto request, Pilsa pilsa) {
         validationCategoryCount(request.getCategoryCd());
+        validationImageCount(request.getImages());
 
         List<PilsaCategory> categoryList = pilsaCategoryRepository.findByCategoryCdIn(request.getCategoryCd());
         List<RelationPilsaCategory> relationPilsaCategories = categoryList.stream()
@@ -123,6 +124,13 @@ public class PilsaService {
     private void validationCategoryCount(List<Long> categoryCd) {
         if (!categoryCd.isEmpty() && categoryCd.size() > 3) {
             throw new BadRequestException(ExceptionCode.MAX_CATEGORY_SIZE);
+        }
+    }
+
+    private void validationImageCount(List<ImageRequest> images) {
+        if (images != null && images.size() >= 2) {
+            throw new BadRequestException(ExceptionCode.IMAGE_COUNT_MUST_ONE);
+
         }
     }
 
