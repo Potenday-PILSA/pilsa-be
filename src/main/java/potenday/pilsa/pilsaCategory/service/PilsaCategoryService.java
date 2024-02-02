@@ -7,6 +7,7 @@ import potenday.pilsa.pilsa.domain.repository.PilsaRepository;
 import potenday.pilsa.pilsaCategory.domain.PilsaCategory;
 import potenday.pilsa.pilsaCategory.domain.YN;
 import potenday.pilsa.pilsaCategory.domain.repository.PilsaCategoryRepository;
+import potenday.pilsa.pilsaCategory.dto.request.RequestCategoryDto;
 import potenday.pilsa.pilsaCategory.dto.response.ResponseCategoryListDto;
 
 import java.util.List;
@@ -23,6 +24,12 @@ public class PilsaCategoryService {
         List<PilsaCategory> categoryList = pilsaCategoryRepository.findByUseYn(YN.Y);
 
         return ResponseCategoryListDto.from(categoryList);
+    }
+
+    public void createPilsaCategory(RequestCategoryDto requestCategoryDto) {
+        pilsaCategoryRepository.save(
+                new PilsaCategory(requestCategoryDto.getCategoryName(), requestCategoryDto.getDescription(), requestCategoryDto.getUseYn())
+        );
     }
 
 }

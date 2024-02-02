@@ -32,4 +32,11 @@ public class PilsaCategory {
     private LocalDateTime registDate;
 
     private LocalDateTime updateDate;
+
+    public PilsaCategory(String categoryName, String description, YN useYn) {
+        this.categoryName = categoryName;
+        this.description = description;
+        this.useYn = useYn;
+        this.registDate = LocalDateTime.now();
+    }
 }
