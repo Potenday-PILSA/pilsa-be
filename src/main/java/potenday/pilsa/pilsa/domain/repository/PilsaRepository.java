@@ -11,6 +11,7 @@ import java.util.Optional;
 
 public interface PilsaRepository extends JpaRepository<Pilsa, Long> {
 
+    List<Pilsa> findByMember_Id(Long id);
     Optional<Pilsa> findByPilsaId(Long pilsaId);
     List<Pilsa> findByMember_IdAndDeleteDateIsNull(Long id);
     Optional<Pilsa> findByPilsaIdAndDeleteDateIsNull(Long pilsaId);
