@@ -82,8 +82,10 @@ public class PilsaController {
 
     @Operation(summary = "필사 삭제", description = "")
     @DeleteMapping("{pilsaId}")
-    public ResponseEntity<Void> deletePilsaInfo(@PathVariable Long pilsaId) {
-        pilsaService.deletePilsa(pilsaId);
+    public ResponseEntity<Void> deletePilsaInfo(
+            @PathVariable Long pilsaId,
+            @Auth Long memberId) {
+        pilsaService.deletePilsa(pilsaId, memberId);
 
         return ResponseEntity.noContent().build();
     }

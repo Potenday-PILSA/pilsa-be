@@ -62,8 +62,9 @@ public class PilsaService {
     }
 
     @Transactional
-    public void deletePilsa(Long pilsaId) {
-        Pilsa pilsa = getPilsa(pilsaId);
+    public void deletePilsa(Long pilsaId, Long memberId) {
+        Pilsa pilsa = pilsaRepository.findByMember_IdAndDeleteDateIsNullAndPilsaId(memberId, pilsaId).orElseThrow(
+                () -> new BadRequestException(ExceptionCode.NOT_FOUND_PILSA));
 
         pilsa.deletePilsa();
     }

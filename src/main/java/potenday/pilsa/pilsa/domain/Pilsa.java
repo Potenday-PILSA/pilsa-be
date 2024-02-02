@@ -137,7 +137,6 @@ public class Pilsa {
 
     public void deletePilsa() {
         this.deleteDate = LocalDateTime.now();
-        this.relationPilsaCategories.clear();
     }
 
     private void validationContent(List<ImageRequest> images, String textContents) {
