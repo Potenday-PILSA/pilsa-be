@@ -10,6 +10,7 @@ public enum ExceptionCode {
 
     NOT_FOUND_MEMBER(2001, "회원을 찾을 수 없습니다."),
     NOT_FOUND_PILSA(2002, "필사를 찾을 수 없습니다."),
+    NOT_FOUND_PILSA_CATEGORY(2003, "필사카테고리를 찾을 수 없습니다."),
 
     EXPIRED_ACCESS_TOKEN(5101, "만료된 액세스 토큰입니다."),
     EXPIRED_REFRESH_TOKEN(5102, "만료된 리프레시 토큰입니다."),

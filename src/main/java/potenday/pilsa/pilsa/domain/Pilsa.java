@@ -29,7 +29,7 @@ public class Pilsa {
 
     // 필사 카테코리
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @JoinColumn(name = "id")
+    @JoinColumn(name = "pilsaIdCategory")
     List<RelationPilsaCategory> relationPilsaCategories;
 
     // 제목

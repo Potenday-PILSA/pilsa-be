@@ -13,4 +13,6 @@ public interface PilsaCategoryRepository extends JpaRepository<PilsaCategory, Lo
     List<PilsaCategory> findByUseYn(YN useYn);
 
     List<PilsaCategory> findByCategoryCdIn(List<Long> categoryCd);
+
+    Optional<PilsaCategory> findByCategoryCd(Long categoryCd);
 }

@@ -51,9 +51,7 @@ public class PilsaBasicContents {
     )
     List<PilsaCategory> categoryList;
 
-
     private LocalDateTime registDate;
 
     private LocalDateTime updateDate;
 }
-
