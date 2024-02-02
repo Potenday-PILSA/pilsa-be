@@ -4,9 +4,6 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Builder;
 import lombok.Getter;
 import org.springframework.data.domain.Page;
-import potenday.pilsa.pilsa.domain.Pilsa;
-import potenday.pilsa.pilsa.dto.response.ResponsePilsaMainCategoryDto;
-import potenday.pilsa.pilsa.dto.response.ResponsePilsaMainDto;
 import potenday.pilsa.pilsaBasicContents.domain.PilsaBasicContents;
 
 import java.util.List;

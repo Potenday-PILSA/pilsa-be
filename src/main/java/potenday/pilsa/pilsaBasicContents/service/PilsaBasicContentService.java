@@ -32,7 +32,7 @@ public class PilsaBasicContentService {
     @Transactional(readOnly = true)
     public ResponseBasicPilsaListDto getAllPilsalList(RequestPageDto request) {
 
-        Page<PilsaBasicContents> pilsas = pilsaBasicContentsRepository.findAll(request.pageable());
+        Page<PilsaBasicContents> pilsas = pilsaBasicContentsRepository.findAll(request.toPageable());
 
         return ResponseBasicPilsaListDto.from(pilsas);
     }

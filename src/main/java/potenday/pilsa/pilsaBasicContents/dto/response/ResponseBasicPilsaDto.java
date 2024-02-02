@@ -3,9 +3,6 @@ package potenday.pilsa.pilsaBasicContents.dto.response;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Builder;
 import lombok.Getter;
-import potenday.pilsa.pilsa.domain.Pilsa;
-import potenday.pilsa.pilsa.domain.YN;
-import potenday.pilsa.pilsa.dto.response.ResponsePilsaMainCategoryDto;
 import potenday.pilsa.pilsaBasicContents.domain.PilsaBasicContents;
 
 import java.time.LocalDateTime;
