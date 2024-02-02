@@ -49,11 +49,9 @@ public class PilsaController {
     @Operation(summary = "필사 상세정보 조회", description = "")
     @GetMapping("{pilsaId}")
     public ResponseEntity<ResponsePilsaDetailDto> getPilsaDetail(
-            @PathVariable Long pilsaId) {
-        // Response - ResponsePilsaDetailDto
-        // TODO: 서비스 기능 구현
+            @PathVariable("pilsaId") Long pilsaId) {
 
-        return ResponseEntity.ok(null);
+        return ResponseEntity.ok(pilsaService.getPilsaDetail(pilsaId));
     }
 
 
@@ -72,21 +70,20 @@ public class PilsaController {
     @Operation(summary = "필사 수정", description = "")
     @PutMapping("{pilsaId}")
     public ResponseEntity<?> updatePilsaInfo(
-            @PathVariable Long pilsaId
-            , @RequestBody @Valid RequestPilsaInfoDto request
-    ) {
-        // Request - RequestPilsaInfoDto
-        // TODO: 서비스 기능 구현
+            @Auth Long memberId,
+            @PathVariable("pilsaId") Long pilsaId,
+            @RequestBody @Valid RequestPilsaInfoDto request) {
+        ResponsePilsaDetailDto responsePilsaDetailDto = pilsaService.updatePilsa(memberId, request, pilsaId);
 
         URI selfLink = URI.create(ServletUriComponentsBuilder.fromCurrentRequest().toUriString());
-        return ResponseEntity.created(selfLink).build();
+        return ResponseEntity.created(selfLink).body(responsePilsaDetailDto);
     }
 
 
-    @Operation(summary = "필사 리스트 삭제", description = "")
+    @Operation(summary = "필사 삭제", description = "")
     @DeleteMapping("{pilsaId}")
-    public ResponseEntity<?> deletePilsaInfo(@PathVariable Long pilsaId) {
-        // TODO: 서비스 기능 구현
+    public ResponseEntity<Void> deletePilsaInfo(@PathVariable Long pilsaId) {
+        pilsaService.deletePilsa(pilsaId);
 
         return ResponseEntity.noContent().build();
     }

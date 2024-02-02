@@ -12,11 +12,14 @@ import java.util.Optional;
 public interface PilsaRepository extends JpaRepository<Pilsa, Long> {
 
     Optional<Pilsa> findByPilsaId(Long pilsaId);
-    List<Pilsa> findByMember_Id(Long id);
+    List<Pilsa> findByMember_IdAndDeleteDateIsNull(Long id);
+    Optional<Pilsa> findByPilsaIdAndDeleteDateIsNull(Long pilsaId);
 
-    Page<Pilsa> findByPrivateTypeOrderByRegistDateDesc(YN privateType, Pageable pageable);
+    Page<Pilsa> findByPrivateTypeAndDeleteDateIsNullOrderByRegistDateDesc(YN privateType, Pageable pageable);
 
     Page<Pilsa> findByOrderByRegistDateDesc(Pageable pageable);
 
-    Page<Pilsa> findByMember_IdOrderByRegistDateDesc(Long memberId, Pageable pageable);
+    Optional<Pilsa> findByMember_IdAndDeleteDateIsNullAndPilsaId(Long member_id, Long pilsaId);
+
+    Page<Pilsa> findByMember_IdAndDeleteDateIsNullOrderByRegistDateDesc(Long memberId, Pageable pageable);
 }
