@@ -30,7 +30,7 @@ public class AuthArgumentResolver implements HandlerMethodArgumentResolver {
         HttpServletRequest request = (HttpServletRequest) webRequest.getNativeRequest();
         String authorizationHeader = request.getHeader("Authorization");
 
-        if (!parameterAnnotation.required() && authorizationHeader.isBlank()){
+        if (!parameterAnnotation.required()){
             return null;
         }
 

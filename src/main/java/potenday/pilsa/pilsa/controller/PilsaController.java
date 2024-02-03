@@ -10,8 +10,10 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import potenday.pilsa.global.dto.request.RequestPageDto;
 import potenday.pilsa.login.Auth;
+import potenday.pilsa.pilsa.dto.request.RequestGetPilsa;
 import potenday.pilsa.pilsa.dto.request.RequestPilsaInfoDto;
 import potenday.pilsa.pilsa.dto.response.ResponsePilsaDetailDto;
+import potenday.pilsa.pilsa.dto.response.ResponsePilsaIncludeDetailDto;
 import potenday.pilsa.pilsa.dto.response.ResponsePilsaMainListDto;
 import potenday.pilsa.pilsa.service.PilsaService;
 
@@ -48,10 +50,12 @@ public class PilsaController {
 
     @Operation(summary = "필사 상세정보 조회", description = "")
     @GetMapping("{pilsaId}")
-    public ResponseEntity<ResponsePilsaDetailDto> getPilsaDetail(
-            @PathVariable("pilsaId") Long pilsaId) {
+    public ResponseEntity<ResponsePilsaIncludeDetailDto> getPilsaDetail(
+            @Parameter(hidden = true) @Auth(required = false) Long memberId,
+            @PathVariable("pilsaId") Long pilsaId,
+            @Valid RequestGetPilsa requestGetPilsa) {
 
-        return ResponseEntity.ok(pilsaService.getPilsaDetail(pilsaId));
+        return ResponseEntity.ok(pilsaService.getPilsaDetail(pilsaId, memberId, requestGetPilsa));
     }
 
 
