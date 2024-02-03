@@ -26,7 +26,7 @@ public class LoginController {
 
     @Operation(summary = "회원가입 & 로그인", description = "")
     @PostMapping("/login")
-    public ResponseEntity<AccessTokenResponse> login(
+    public ResponseEntity<TokenPair> login(
             @RequestBody @Valid LoginRequest request) {
         TokenPair tokenPair = loginService.login(request);
 
@@ -45,7 +45,7 @@ public class LoginController {
         // body 에는 엑세스토큰을 보내고 쿠키에는 리프레쉬 토큰 저장
         return ResponseEntity.ok()
                 .header("Set-Cookie", refreshTokenCookie.toString())
-                .body(accessTokenRes);
+                .body(tokenPair);
     }
 
     @Operation(summary = "엑세스 토큰이 만료되었을때 토큰 반환", description = "AccessTokenResponse")
