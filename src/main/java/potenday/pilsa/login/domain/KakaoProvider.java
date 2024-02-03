@@ -38,7 +38,7 @@ public class KakaoProvider {
                         .client_id(CLIENT_ID)
                         .grant_type(GRANT_TYPE)
                         .client_secret(CLIENT_SECRET)
-                        .redirect_uri(loginRequest.getIsLocal() ? REDIRECT_URI_LOCAL : REDIRECT_URI)
+                        .redirect_uri(loginRequest.getRedirectUri())
                         .code(loginRequest.getAuthCode())
                 .build();
 
