@@ -3,6 +3,7 @@ package potenday.pilsa.login.controller;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -26,7 +27,7 @@ public class LoginController {
     @Operation(summary = "회원가입 & 로그인", description = "")
     @PostMapping("/login")
     public ResponseEntity<AccessTokenResponse> login(
-            @RequestBody LoginRequest request) {
+            @RequestBody @Valid LoginRequest request) {
         TokenPair tokenPair = loginService.login(request);
 
         // 엑세스 토큰은 프론트로 보내고 리프레쉬 토큰은 쿠키에 저장한다.
