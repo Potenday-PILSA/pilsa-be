@@ -28,7 +28,6 @@ public class ResponsePilsaMainListDto {
     }
 
     public static ResponsePilsaMainListDto from(Page<Pilsa> pilsaPage) {
-        System.out.println("pilsaPage = " + pilsaPage.getContent().get(0).getPilsaId());
         List<ResponsePilsaDetailDto> responsePilsaDetailDtos = pilsaPage.getContent().stream()
                 .map(ResponsePilsaDetailDto::from)
                 .toList();
