@@ -14,8 +14,10 @@ import potenday.pilsa.member.domain.repository.MemberRepository;
 import potenday.pilsa.pilsa.domain.Pilsa;
 import potenday.pilsa.pilsa.domain.YN;
 import potenday.pilsa.pilsa.domain.repository.PilsaRepository;
+import potenday.pilsa.pilsa.dto.request.RequestGetPilsa;
 import potenday.pilsa.pilsa.dto.request.RequestPilsaInfoDto;
 import potenday.pilsa.pilsa.dto.response.ResponsePilsaDetailDto;
+import potenday.pilsa.pilsa.dto.response.ResponsePilsaIncludeDetailDto;
 import potenday.pilsa.pilsa.dto.response.ResponsePilsaMainListDto;
 import potenday.pilsa.pilsaCategory.domain.PilsaCategory;
 import potenday.pilsa.pilsaCategory.domain.repository.PilsaCategoryRepository;
@@ -26,6 +28,7 @@ import potenday.pilsa.relationPilsaCategory.domain.RelationPilsaCategory;
 import potenday.pilsa.relationPilsaCategory.domain.repository.RelationPilsaCategoryRepository;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -57,8 +60,23 @@ public class PilsaService {
         return ResponsePilsaMainListDto.from(pilsas);
     }
 
-    public ResponsePilsaDetailDto getPilsaDetail(Long pilsaId) {
-        return ResponsePilsaDetailDto.from(getPilsa(pilsaId));
+    public ResponsePilsaIncludeDetailDto getPilsaDetail(Long pilsaId, Long memberId, RequestGetPilsa requestGetPilsa) {
+        Optional<Pilsa> nextPilsa;
+        Optional<Pilsa> previousPilsa;
+
+        if (requestGetPilsa.getGetMyPilsa()) {
+            if (memberId == null) {
+                throw new BadRequestException(ExceptionCode.NOT_FOUND_MEMBER);
+            }
+
+            nextPilsa = pilsaRepository.getNextAndPreviousPilsa(pilsaId, memberId, true);
+            previousPilsa = pilsaRepository.getNextAndPreviousPilsa(pilsaId, memberId, false);
+        } else {
+            nextPilsa = pilsaRepository.getNextAndPreviousPilsa(pilsaId, null, true);
+            previousPilsa = pilsaRepository.getNextAndPreviousPilsa(pilsaId, null, false);
+        }
+
+        return ResponsePilsaIncludeDetailDto.from(getPilsa(pilsaId), nextPilsa, previousPilsa);
     }
 
     @Transactional
