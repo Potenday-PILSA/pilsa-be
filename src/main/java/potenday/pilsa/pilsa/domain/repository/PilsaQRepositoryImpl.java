@@ -29,8 +29,7 @@ public class PilsaQRepositoryImpl implements PilsaQRepository {
         JPAQuery<Pilsa> baseQuery = query
                 .select(pilsa)
                 .from(pilsa)
-                .where(pilsa.deleteDate.isNull())
-                .orderBy(pilsa.pilsaId.asc());
+                .where(pilsa.deleteDate.isNull());
 
         if (memberId != null) {
             baseQuery.where(pilsa.member.id.eq(memberId));
@@ -41,13 +40,14 @@ public class PilsaQRepositoryImpl implements PilsaQRepository {
             return Optional.ofNullable(
                     baseQuery
                             .where(pilsa.pilsaId.gt(pilsaId))
+                            .orderBy(pilsa.pilsaId.asc())
                             .fetchFirst()
             );
         } else {
             return Optional.ofNullable(
                     baseQuery
                             .where(pilsa.pilsaId.lt(pilsaId))
-                            .orderBy(pilsa.pilsaId.desc()) // 이전 게시물을 가져올 때는 역순으로 정렬
+                            .orderBy(pilsa.pilsaId.desc())
                             .fetchFirst()
             );
         }
