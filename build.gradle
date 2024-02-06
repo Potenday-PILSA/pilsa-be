@@ -31,7 +31,10 @@ dependencies {
     implementation "org.springframework.boot:spring-boot-starter-web"
     implementation "org.springdoc:springdoc-openapi-starter-webmvc-ui:2.1.0"
     implementation "org.springframework.boot:spring-boot-starter-log4j2"
-    compileOnly "org.projectlombok:lombok"
+    implementation 'org.projectlombok:lombok'
+    compileOnly 'org.projectlombok:lombok'
+    annotationProcessor 'org.projectlombok:lombok'
+    implementation 'org.springframework.boot:spring-boot-starter-validation'
 
     developmentOnly "org.springframework.boot:spring-boot-devtools"
     annotationProcessor "org.projectlombok:lombok"
@@ -52,6 +55,27 @@ dependencies {
     implementation "org.springframework.cloud:spring-cloud-starter-openfeign:4.1.0"
     implementation "org.springframework.cloud:spring-cloud-starter-aws:2.2.6.RELEASE"
 
+    // QueryDsl
+    implementation 'com.querydsl:querydsl-jpa:5.0.0:jakarta'
+    annotationProcessor "com.querydsl:querydsl-apt:5.0.0:jakarta"
+    annotationProcessor "jakarta.annotation:jakarta.annotation-api"
+    annotationProcessor "jakarta.persistence:jakarta.persistence-api"
+    // QueryDsl
+
+}
+
+def querydslDir = layout.buildDirectory.dir("generated/querydsl").get().asFile
+
+sourceSets {
+    main.java.srcDirs += [ querydslDir ]
+}
+
+tasks.withType(JavaCompile).configureEach {
+    options.getGeneratedSourceOutputDirectory().set(file(querydslDir))
+}
+
+clean.doLast {
+    file(querydslDir).deleteDir()
 }
 
 tasks.named('bootBuildImage') {
@@ -60,4 +84,8 @@ tasks.named('bootBuildImage') {
 
 tasks.named('test') {
     useJUnitPlatform()
+}
+
+tasks.withType(JavaCompile).configureEach {
+    options.compilerArgs << "-parameters"
 }
