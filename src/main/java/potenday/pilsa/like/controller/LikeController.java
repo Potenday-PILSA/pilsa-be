@@ -41,4 +41,13 @@ public class LikeController {
         return ResponseEntity.ok().body(likeService.like(pilsaId, memberId));
     }
 
+    @Operation(summary = "좋아요 기능")
+    @PostMapping("/{pilsaId}")
+    public ResponseEntity<ResponseLikeDto> like(
+            @PathVariable("pilsaId") Long pilsaId,
+            @Parameter(hidden = true) @Auth Long memberId) {
+
+        return ResponseEntity.ok().body(likeService.like(pilsaId, memberId));
+    }
+
 }

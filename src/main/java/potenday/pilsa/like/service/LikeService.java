@@ -6,7 +6,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import potenday.pilsa.global.dto.request.RequestPageDto;
 import potenday.pilsa.global.exception.BadRequestException;
 import potenday.pilsa.global.exception.ExceptionCode;
 import potenday.pilsa.like.domain.Like;
@@ -33,6 +32,7 @@ public class LikeService {
     private final LikeRepository likeRepository;
     private final PilsaRepository pilsaRepository;
     private final MemberRepository memberRepository;
+
     public ResponsePilsaListDto myLikeList(Long memberId, RequestPageDto request) {
         Page<Like> like = likeRepository.findByMember_IdAndPilsa_DeleteDateIsNullOrderByRegistDateDesc(memberId, request.toPageable());
         List<Pilsa> pilsaList = like.stream()
