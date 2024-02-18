@@ -7,12 +7,9 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import potenday.pilsa.global.dto.request.RequestPageDto;
-import potenday.pilsa.like.dto.response.ResponseLikePilsaDetailDto;
-import potenday.pilsa.like.dto.response.ResponseLikePilsaListDto;
+import potenday.pilsa.like.dto.response.ResponseLikeDto;
 import potenday.pilsa.like.service.LikeService;
 import potenday.pilsa.login.Auth;
 
@@ -27,11 +24,20 @@ public class LikeController {
 
     @Operation(summary = "내가 좋아요한 필사리스트 조회(페이징처리)", description = "좋아요한 날짜 기준 내림차순 정렬")
     @GetMapping
-    public ResponseEntity<ResponseLikePilsaListDto> getLikePilsaListOfMember(
+    public ResponseEntity<?> getLikePilsaListOfMember(
             @Valid RequestPageDto request
             ) {
 
         return ResponseEntity.ok(null);
+    }
+
+    @Operation(summary = "좋아요 기능")
+    @PostMapping("/{pilsaId}")
+    public ResponseEntity<ResponseLikeDto> like(
+            @PathVariable("pilsaId") Long pilsaId,
+            @Parameter(hidden = true) @Auth Long memberId) {
+
+        return ResponseEntity.ok().body(likeService.like(pilsaId, memberId));
     }
 
 }
