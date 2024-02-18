@@ -18,7 +18,7 @@ import potenday.pilsa.pilsa.dto.request.RequestGetPilsa;
 import potenday.pilsa.pilsa.dto.request.RequestPilsaInfoDto;
 import potenday.pilsa.pilsa.dto.response.ResponsePilsaDetailDto;
 import potenday.pilsa.pilsa.dto.response.ResponsePilsaIncludeDetailDto;
-import potenday.pilsa.pilsa.dto.response.ResponsePilsaMainListDto;
+import potenday.pilsa.pilsa.dto.response.ResponsePilsaListDto;
 import potenday.pilsa.pilsaCategory.domain.PilsaCategory;
 import potenday.pilsa.pilsaCategory.domain.repository.PilsaCategoryRepository;
 import potenday.pilsa.pilsaImage.domain.PilsaImage;
@@ -45,19 +45,19 @@ public class PilsaService {
     private final RelationPilsaCategoryRepository relationPilsaCategoryRepository;
 
     @Transactional(readOnly = true)
-    public ResponsePilsaMainListDto getAllPilsalList(RequestPageDto request) {
+    public ResponsePilsaListDto getAllPilsalList(RequestPageDto request) {
         Page<Pilsa> pilsas = pilsaRepository.findByPrivateTypeAndDeleteDateIsNullOrderByRegistDateDesc(YN.N, request.toPageable());
 
-        return ResponsePilsaMainListDto.from(pilsas);
+        return ResponsePilsaListDto.from(pilsas);
     }
 
     @Transactional(readOnly = true)
-    public ResponsePilsaMainListDto getPilsalListOfMember(Long memberId, RequestPageDto request) {
+    public ResponsePilsaListDto getPilsalListOfMember(Long memberId, RequestPageDto request) {
         Member member = getMember(memberId);
 
         Page<Pilsa> pilsas = pilsaRepository.findByMember_IdAndDeleteDateIsNullOrderByRegistDateDesc(member.getId(), request.toPageable());
 
-        return ResponsePilsaMainListDto.from(pilsas);
+        return ResponsePilsaListDto.from(pilsas);
     }
 
     public ResponsePilsaIncludeDetailDto getPilsaDetail(Long pilsaId, Long memberId, RequestGetPilsa requestGetPilsa) {

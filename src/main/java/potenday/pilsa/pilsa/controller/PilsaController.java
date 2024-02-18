@@ -14,7 +14,7 @@ import potenday.pilsa.pilsa.dto.request.RequestGetPilsa;
 import potenday.pilsa.pilsa.dto.request.RequestPilsaInfoDto;
 import potenday.pilsa.pilsa.dto.response.ResponsePilsaDetailDto;
 import potenday.pilsa.pilsa.dto.response.ResponsePilsaIncludeDetailDto;
-import potenday.pilsa.pilsa.dto.response.ResponsePilsaMainListDto;
+import potenday.pilsa.pilsa.dto.response.ResponsePilsaListDto;
 import potenday.pilsa.pilsa.service.PilsaService;
 
 import java.net.URI;
@@ -29,9 +29,9 @@ public class PilsaController {
 
     @Operation(summary = "메인 페이지 전체 필사 리스트 조회(페이징처리)", description = "등록일 기준 내림차순 나열")
     @GetMapping("list")
-    public ResponseEntity<ResponsePilsaMainListDto> getPilsaList(@Valid RequestPageDto request) {
+    public ResponseEntity<ResponsePilsaListDto> getPilsaList(@Valid RequestPageDto request) {
 
-        ResponsePilsaMainListDto pilsaMainListDto = pilsaService.getAllPilsalList(request);
+        ResponsePilsaListDto pilsaMainListDto = pilsaService.getAllPilsalList(request);
 
         return ResponseEntity.ok(pilsaMainListDto);
     }
@@ -39,11 +39,11 @@ public class PilsaController {
 
     @Operation(summary = "내가 쓴 필사 리스트 조회(페이징처리)", description = "등록일 기준 내림차순 나열")
     @GetMapping
-    public ResponseEntity<ResponsePilsaMainListDto> getPilsaListOfMember(
+    public ResponseEntity<ResponsePilsaListDto> getPilsaListOfMember(
             @Parameter(hidden = true) @Auth Long memberId,
             @Valid RequestPageDto request) {
 
-        ResponsePilsaMainListDto pilsaMainListDto = pilsaService.getPilsalListOfMember(memberId, request);
+        ResponsePilsaListDto pilsaMainListDto = pilsaService.getPilsalListOfMember(memberId, request);
 
         return ResponseEntity.ok(pilsaMainListDto);
     }
