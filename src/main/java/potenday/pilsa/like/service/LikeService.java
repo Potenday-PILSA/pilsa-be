@@ -2,6 +2,8 @@ package potenday.pilsa.like.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.ToString;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import potenday.pilsa.global.exception.BadRequestException;
@@ -15,6 +17,11 @@ import potenday.pilsa.member.domain.Status;
 import potenday.pilsa.member.domain.repository.MemberRepository;
 import potenday.pilsa.pilsa.domain.Pilsa;
 import potenday.pilsa.pilsa.domain.repository.PilsaRepository;
+import potenday.pilsa.pilsa.dto.response.ResponsePilsaListDto;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -25,6 +32,15 @@ public class LikeService {
     private final LikeRepository likeRepository;
     private final PilsaRepository pilsaRepository;
     private final MemberRepository memberRepository;
+
+    public ResponsePilsaListDto myLikeList(Long memberId, RequestPageDto request) {
+        Page<Like> like = likeRepository.findByMember_IdAndPilsa_DeleteDateIsNullOrderByRegistDateDesc(memberId, request.toPageable());
+        List<Pilsa> pilsaList = like.stream()
+                .map(Like::getPilsa)
+                .toList();
+
+        return ResponsePilsaListDto.from(new PageImpl<>(pilsaList, like.getPageable(), like.getTotalPages()));
+    }
 
     public ResponseLikeDto like(Long pilsaId, Long memberId) {
         Pilsa pilsa = pilsaRepository.findByPilsaIdAndDeleteDateIsNull(pilsaId).orElseThrow(
