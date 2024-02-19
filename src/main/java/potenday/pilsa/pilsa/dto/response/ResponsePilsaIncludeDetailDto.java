@@ -51,9 +51,11 @@ public class ResponsePilsaIncludeDetailDto {
     private ResponseNextPreviousPilsaDto nextPilsa;
     @Schema(description = "이전 필사 내용")
     private ResponseNextPreviousPilsaDto previousPilsa;
+    @Schema(description = "내가 좋아요한 여부")
+    private Boolean isLikedAble;
 
     @Builder
-    public ResponsePilsaIncludeDetailDto(Long pilsaId, String title, String author, String publisher, YN privateType, String textContents, String backgroundImageUrl, String backgroundColor, LocalDateTime registDate, LocalDateTime updateDate, List<ResponseCategoryDto> categoryLists, List<ResponseImagetDto> pilsaImages, MemberInfoResponse memberInfoResponse, Boolean isNextPilsa, Boolean isPreviousPilsa, ResponseNextPreviousPilsaDto nextPilsa, ResponseNextPreviousPilsaDto previousPilsa) {
+    public ResponsePilsaIncludeDetailDto(Long pilsaId, String title, String author, String publisher, YN privateType, String textContents, String backgroundImageUrl, String backgroundColor, LocalDateTime registDate, LocalDateTime updateDate, List<ResponseCategoryDto> categoryLists, List<ResponseImagetDto> pilsaImages, MemberInfoResponse memberInfoResponse, Boolean isNextPilsa, Boolean isPreviousPilsa, ResponseNextPreviousPilsaDto nextPilsa, ResponseNextPreviousPilsaDto previousPilsa, Boolean isLiked) {
         this.pilsaId = pilsaId;
         this.title = title;
         this.author = author;
@@ -71,9 +73,10 @@ public class ResponsePilsaIncludeDetailDto {
         this.isPreviousPilsa = isPreviousPilsa;
         this.nextPilsa = nextPilsa;
         this.previousPilsa = previousPilsa;
+        this.isLikedAble = isLiked;
     }
 
-    public static ResponsePilsaIncludeDetailDto from(Pilsa pilsa, Optional<Pilsa> nextPilsa, Optional<Pilsa> previousPilsa) {
+    public static ResponsePilsaIncludeDetailDto from(Pilsa pilsa, Optional<Pilsa> nextPilsa, Optional<Pilsa> previousPilsa, Boolean isLiked) {
         MemberInfoResponse member = MemberInfoResponse.from(pilsa.getMember());
         List<ResponseCategoryDto> responseCategoryDtos = pilsa.getRelationPilsaCategories()
                 .stream()
@@ -102,6 +105,7 @@ public class ResponsePilsaIncludeDetailDto {
                 .isPreviousPilsa(previousPilsa.isPresent())
                 .nextPilsa(nextPilsa.map(ResponseNextPreviousPilsaDto::from).orElse(null))
                 .previousPilsa(previousPilsa.map(ResponseNextPreviousPilsaDto::from).orElse(null))
+                .isLiked(isLiked)
                 .build();
     }
 }

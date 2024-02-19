@@ -44,13 +44,13 @@ public class ResponsePilsaDetailDto {
     private List<ResponseImagetDto> pilsaImages;
     @Schema(description = "회원 정보")
     private MemberInfoResponse memberInfoResponse;
+    @Schema(description = "내가 좋아요한 여부")
+    private Boolean isLikedAble;
 
     @Builder
-    public ResponsePilsaDetailDto(Long pilsaId, MemberInfoResponse memberInfoResponse, String title, List<ResponseCategoryDto> categoryLists, String author, String publisher, YN privateType, String textContents, String backgroundImageUrl, String backgroundColor, LocalDateTime registDate, LocalDateTime updateDate, List<ResponseImagetDto> pilsaImages) {
+    public ResponsePilsaDetailDto(Long pilsaId, String title, String author, String publisher, YN privateType, String textContents, String backgroundImageUrl, String backgroundColor, LocalDateTime registDate, LocalDateTime updateDate, List<ResponseCategoryDto> categoryLists, List<ResponseImagetDto> pilsaImages, MemberInfoResponse memberInfoResponse, Boolean isLikedAble) {
         this.pilsaId = pilsaId;
-        this.memberInfoResponse = memberInfoResponse;
         this.title = title;
-        this.categoryLists = categoryLists;
         this.author = author;
         this.publisher = publisher;
         this.privateType = privateType;
@@ -59,10 +59,13 @@ public class ResponsePilsaDetailDto {
         this.backgroundColor = backgroundColor;
         this.registDate = registDate;
         this.updateDate = updateDate;
+        this.categoryLists = categoryLists;
         this.pilsaImages = pilsaImages;
+        this.memberInfoResponse = memberInfoResponse;
+        this.isLikedAble = isLikedAble;
     }
 
-    public static ResponsePilsaDetailDto from(Pilsa pilsa) {
+    public static ResponsePilsaDetailDto from(Pilsa pilsa, Boolean isLikedAble) {
         MemberInfoResponse member = MemberInfoResponse.from(pilsa.getMember());
         List<ResponseCategoryDto> responseCategoryDtos = pilsa.getRelationPilsaCategories()
                 .stream()
@@ -87,6 +90,7 @@ public class ResponsePilsaDetailDto {
                 .categoryLists(responseCategoryDtos)
                 .memberInfoResponse(member)
                 .pilsaImages(responseImagetDtos)
+                .isLikedAble(isLikedAble)
                 .build();
     }
 }
