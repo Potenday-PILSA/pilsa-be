@@ -9,9 +9,9 @@ name: Java CI-CD with Gradle
 
 on:
   push:
-    branches: [ "deploy/#54" ]
+    branches: [ "main" ]
   pull_request:
-    branches: [ "deploy/#54" ]
+    branches: [ "main" ]
 
 jobs:
   build_dockerpush:
@@ -44,7 +44,7 @@ jobs:
       run: ./gradlew build
 
     - name: Login to NCP Container Registry
-      if: contains(github.ref, 'deploy/#54')
+      if: contains(github.ref, 'main')
       uses: docker/login-action@v2
       with:
         registry: ${{ secrets.REGISTRY_INFO }}
@@ -52,7 +52,7 @@ jobs:
         password: ${{ secrets.DOCKER_REGISTRY_SECRET_KEY }}
 
     - name: build and push
-      if: contains(github.ref, 'deploy/#54')
+      if: contains(github.ref, 'main')
       uses: docker/build-push-action@v3
       with:
         context: .
