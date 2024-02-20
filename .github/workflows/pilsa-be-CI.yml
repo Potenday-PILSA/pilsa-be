@@ -58,6 +58,6 @@ jobs:
         context: .
         file: ./Dockerfile-dev
         push: true
-        tags: ${{ secrets.REGISTRY_INFO }}/pilsa-be
-        cache-from: type=registry,ref=${{ secrets.REGISTRY_INFO }}/pilsa-be
+        tags: ${{ secrets.REGISTRY_INFO }}/pilsa-be:dev
+        cache-from: type=registry,ref=${{ secrets.REGISTRY_INFO }}/pilsa-be:dev
         cache-to: type=inline
