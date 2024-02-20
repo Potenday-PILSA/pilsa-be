@@ -34,7 +34,7 @@ jobs:
     - name: make application.yml
       if: true 
       run: |
-        cd ./src/deploy/#54
+        cd ./src/main
         mkdir resources
         cd resources
         touch ./application.yml
