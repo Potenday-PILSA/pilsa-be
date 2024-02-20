@@ -47,7 +47,7 @@ jobs:
       if: contains(github.ref, 'deploy/#54')
       uses: docker/login-action@v2
       with:
-        registry: ${{ secrets.REGISTRY_INFO_PROD }}
+        registry: ${{ secrets.REGISTRY_INFO }}
         username: ${{ secrets.DOCKER_REGISTRY_ACCESS_KEY }}
         password: ${{ secrets.DOCKER_REGISTRY_SECRET_KEY }}
 
@@ -58,6 +58,6 @@ jobs:
         context: .
         file: ./Dockerfile-dev
         push: true
-        tags: ${{ secrets.REGISTRY_INFO }}/pilsa-be:prod
-        cache-from: type=registry,ref=${{ secrets.REGISTRY_INFO_PROD }}/pilsa-be:prod
+        tags: ${{ secrets.REGISTRY }}/pilsa-be:prod
+        cache-from: type=registry,ref=${{ secrets.REGISTRY_INFO }}/pilsa-be:prod
         cache-to: type=inline
