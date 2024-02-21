@@ -29,9 +29,11 @@ public class PilsaController {
 
     @Operation(summary = "메인 페이지 전체 필사 리스트 조회(페이징처리)", description = "등록일 기준 내림차순 나열")
     @GetMapping("list")
-    public ResponseEntity<ResponsePilsaListDto> getPilsaList(@Valid RequestPageDto request) {
+    public ResponseEntity<ResponsePilsaListDto> getPilsaList(
+            @Valid RequestPageDto request,
+            @Parameter(hidden = true) @Auth(required = false) Long memberId) {
 
-        ResponsePilsaListDto pilsaMainListDto = pilsaService.getAllPilsalList(request);
+        ResponsePilsaListDto pilsaMainListDto = pilsaService.getAllPilsalList(request, memberId);
 
         return ResponseEntity.ok(pilsaMainListDto);
     }

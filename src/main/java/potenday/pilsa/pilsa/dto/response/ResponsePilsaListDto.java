@@ -4,8 +4,6 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.springframework.data.domain.Page;
-import potenday.pilsa.pilsa.domain.Pilsa;
 
 import java.util.List;
 
@@ -26,14 +24,10 @@ public class ResponsePilsaListDto {
         this.pilsaLists = pilsaLists;
     }
 
-    public static ResponsePilsaListDto from(Page<Pilsa> pilsaPage) {
-        List<ResponsePilsaDetailDto> responsePilsaDetailDtos = pilsaPage.getContent().stream()
-                .map(ResponsePilsaDetailDto::from)
-                .toList();
-
+    public static ResponsePilsaListDto from(List<ResponsePilsaDetailDto> pilsaLists, Long totalCount) {
         return ResponsePilsaListDto.builder()
-                .totalCount(pilsaPage.getTotalElements())
-                .pilsaLists(responsePilsaDetailDtos)
+                .totalCount(totalCount)
+                .pilsaLists(pilsaLists)
                 .build();
     }
 }

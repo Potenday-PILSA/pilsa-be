@@ -8,6 +8,7 @@ import org.springframework.transaction.annotation.Transactional;
 import potenday.pilsa.global.dto.request.RequestPageDto;
 import potenday.pilsa.global.exception.BadRequestException;
 import potenday.pilsa.global.exception.ExceptionCode;
+import potenday.pilsa.like.domain.repository.LikeRepository;
 import potenday.pilsa.member.domain.Member;
 import potenday.pilsa.member.domain.Status;
 import potenday.pilsa.member.domain.repository.MemberRepository;
@@ -27,6 +28,7 @@ import potenday.pilsa.pilsaImage.dto.request.ImageRequest;
 import potenday.pilsa.relationPilsaCategory.domain.RelationPilsaCategory;
 import potenday.pilsa.relationPilsaCategory.domain.repository.RelationPilsaCategoryRepository;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -43,12 +45,13 @@ public class PilsaService {
     private final PilsaCategoryRepository pilsaCategoryRepository;
     private final PilsaImageRepository pilsaImageRepository;
     private final RelationPilsaCategoryRepository relationPilsaCategoryRepository;
+    private final LikeRepository likeRepository;
 
     @Transactional(readOnly = true)
-    public ResponsePilsaListDto getAllPilsalList(RequestPageDto request) {
+    public ResponsePilsaListDto getAllPilsalList(RequestPageDto request, Long memberId) {
         Page<Pilsa> pilsas = pilsaRepository.findByPrivateTypeAndDeleteDateIsNullOrderByRegistDateDesc(YN.N, request.toPageable());
 
-        return ResponsePilsaListDto.from(pilsas);
+        return ResponsePilsaListDto.from(getPilsaDetailResponseDto(pilsas.getContent(), memberId), pilsas.getTotalElements());
     }
 
     @Transactional(readOnly = true)
@@ -57,7 +60,7 @@ public class PilsaService {
 
         Page<Pilsa> pilsas = pilsaRepository.findByMember_IdAndDeleteDateIsNullOrderByRegistDateDesc(member.getId(), request.toPageable());
 
-        return ResponsePilsaListDto.from(pilsas);
+        return ResponsePilsaListDto.from(getPilsaDetailResponseDto(pilsas.getContent(), memberId), pilsas.getTotalElements());
     }
 
     public ResponsePilsaIncludeDetailDto getPilsaDetail(Long pilsaId, Long memberId, RequestGetPilsa requestGetPilsa) {
@@ -76,7 +79,7 @@ public class PilsaService {
             previousPilsa = pilsaRepository.getNextAndPreviousPilsa(pilsaId, null, false);
         }
 
-        return ResponsePilsaIncludeDetailDto.from(getPilsa(pilsaId), nextPilsa, previousPilsa);
+        return ResponsePilsaIncludeDetailDto.from(getPilsa(pilsaId), nextPilsa, previousPilsa, isLikeAblePilsa(memberId, pilsaId));
     }
 
     @Transactional
@@ -107,7 +110,7 @@ public class PilsaService {
                 request.getBackgroundColor(),
                 request);
 
-        return ResponsePilsaDetailDto.from(pilsaSave(request, pilsa));
+        return ResponsePilsaDetailDto.from(pilsa, isLikeAblePilsa(memberId, pilsa.getPilsaId()));
     }
 
     public Pilsa pilsaSave(RequestPilsaInfoDto request, Pilsa pilsa) {
@@ -136,7 +139,14 @@ public class PilsaService {
         pilsaImageRepository.deleteByPilsa_PilsaId(pilsaId);
         relationPilsaCategoryRepository.deleteByPilsa_PilsaId(pilsaId);
 
-        return ResponsePilsaDetailDto.from(pilsaSave(requestPilsaInfoDto, pilsa));
+        return ResponsePilsaDetailDto.from(pilsaSave(requestPilsaInfoDto, pilsa), isLikeAblePilsa(memberId, pilsaId));
+    }
+
+    private List<ResponsePilsaDetailDto> getPilsaDetailResponseDto(List<Pilsa> pilsas, Long memberId) {
+        return pilsas.stream().map(
+                pilsa -> ResponsePilsaDetailDto.from(
+                        pilsa, isLikeAblePilsa(memberId, pilsa.getPilsaId())))
+                .collect(Collectors.toList());
     }
 
     private void validationCategoryCount(List<Long> categoryCd) {
@@ -162,5 +172,9 @@ public class PilsaService {
         return memberRepository.findByIdAndStatus(memberId, Status.ACTIVE).orElseThrow(
                 () -> new BadRequestException(ExceptionCode.NOT_FOUND_MEMBER)
         );
+    }
+
+    private Boolean isLikeAblePilsa(Long memberId, Long pilsaId) {
+        return likeRepository.existsByMember_IdAndPilsa_PilsaId(memberId, pilsaId);
     }
 }

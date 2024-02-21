@@ -18,9 +18,11 @@ import potenday.pilsa.member.domain.Status;
 import potenday.pilsa.member.domain.repository.MemberRepository;
 import potenday.pilsa.pilsa.domain.Pilsa;
 import potenday.pilsa.pilsa.domain.repository.PilsaRepository;
+import potenday.pilsa.pilsa.dto.response.ResponsePilsaDetailDto;
 import potenday.pilsa.pilsa.dto.response.ResponsePilsaListDto;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -38,7 +40,7 @@ public class LikeService {
                 .map(Like::getPilsa)
                 .toList();
 
-        return ResponsePilsaListDto.from(new PageImpl<>(pilsaList, like.getPageable(), like.getTotalPages()));
+        return ResponsePilsaListDto.from(getPilsaDetailResponseDto(pilsaList, memberId), like.getTotalElements());
     }
 
     public ResponseLikeDto like(Long pilsaId, Long memberId) {
@@ -72,5 +74,16 @@ public class LikeService {
         return memberRepository.findByIdAndStatus(memberId, Status.ACTIVE).orElseThrow(
                 () -> new BadRequestException(ExceptionCode.NOT_FOUND_MEMBER)
         );
+    }
+
+    private List<ResponsePilsaDetailDto> getPilsaDetailResponseDto(List<Pilsa> pilsas, Long memberId) {
+        return pilsas.stream().map(
+                        pilsa -> ResponsePilsaDetailDto.from(
+                                pilsa, isLikeAblePilsa(memberId, pilsa.getPilsaId())))
+                .collect(Collectors.toList());
+    }
+
+    private Boolean isLikeAblePilsa(Long memberId, Long pilsaId) {
+        return likeRepository.existsByMember_IdAndPilsa_PilsaId(memberId, pilsaId);
     }
 }

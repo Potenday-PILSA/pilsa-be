@@ -12,4 +12,5 @@ import java.util.Optional;
 public interface LikeRepository extends JpaRepository<Like, Long> {
     Page<Like> findByMember_IdAndPilsa_DeleteDateIsNullOrderByRegistDateDesc(Long memberId, Pageable pageable);
     Optional<Like> findByMember_IdAndPilsa(Long member_id, Pilsa pilsa);
+    Boolean existsByMember_IdAndPilsa_PilsaId(Long member_id, Long pilsa_pilsaId);
 }
