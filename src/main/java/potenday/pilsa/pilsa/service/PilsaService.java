@@ -110,7 +110,9 @@ public class PilsaService {
                 request.getBackgroundColor(),
                 request);
 
-        return ResponsePilsaDetailDto.from(pilsa, isLikeAblePilsa(memberId, pilsa.getPilsaId()));
+        Pilsa savePilsa = pilsaSave(request, pilsa);
+
+        return ResponsePilsaDetailDto.from(savePilsa, isLikeAblePilsa(memberId, savePilsa.getPilsaId()));
     }
 
     public Pilsa pilsaSave(RequestPilsaInfoDto request, Pilsa pilsa) {
