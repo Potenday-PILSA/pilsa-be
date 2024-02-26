@@ -27,7 +27,7 @@ public class MemberService {
     @Transactional
     public MemberInfoResponse updateMember(Long memberId, MemberUpdateRequest request) {
         Member member = getMember(memberId);
-        member.updateDescription(request.getDescription());
+        member.updateDescription(request);
 
         return MemberInfoResponse.from(member);
     }

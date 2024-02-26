@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import potenday.pilsa.member.dto.request.MemberUpdateRequest;
 
 import java.time.LocalDateTime;
 
@@ -13,8 +14,7 @@ import java.time.LocalDateTime;
 @Table(name = "memberInfo")
 public class Member {
     private static final String DELETED_MEMBER_NICKNAME = "탈퇴회원";
-    // TODO : 나중에 다른 디폴트 이미지로 변경
-    private static final String DEFAULT_IMAGE = "https://weavers-siltarae.s3.ap-northeast-2.amazonaws.com/profile/default_image.png";
+    private static final String DEFAULT_IMAGE = "https://kr.object.ncloudstorage.com/pilsa-image/pilsa-content/profile_sample.png";
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -53,9 +53,21 @@ public class Member {
         this.status = Status.ACTIVE;
     }
 
-    public void updateDescription(String description) {
-        this.description = description;
+    public void updateDescription(MemberUpdateRequest updateRequest) {
+        this.description = updateRequest.getDescription();
+        this.profileNickName = updateRequest.getNickName();
+
+        if (updateRequest.getImageUrl().isEmpty()) {
+            setDefaultImage();
+        } else {
+            this.profileImageUrl = updateRequest.getImageUrl();
+        }
+
         this.updateDate = LocalDateTime.now();
+    }
+
+    private void setDefaultImage() {
+        this.profileImageUrl = DEFAULT_IMAGE;
     }
 
     public void deleteMember() {
