@@ -6,27 +6,30 @@ import io.jsonwebtoken.security.Jwks;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
+import potenday.pilsa.like.domain.QLike;
 import potenday.pilsa.pilsa.domain.Pilsa;
 import potenday.pilsa.pilsa.domain.QPilsa;
+import potenday.pilsa.pilsa.domain.YN;
 
+import java.util.List;
 import java.util.Optional;
 
 @Repository
 @RequiredArgsConstructor
 public class PilsaQRepositoryImpl implements PilsaQRepository {
-    @PersistenceContext
-    private EntityManager entityManager;
 
+    private final JPAQueryFactory queryFactory;
+    private final QPilsa pilsa = QPilsa.pilsa;
+    private final QLike like = QLike.like;
 
     @Override
     public Optional<Pilsa> getNextAndPreviousPilsa(Long pilsaId, Long memberId, Boolean isNext) {
-        QPilsa pilsa = QPilsa.pilsa;
-
-        JPAQuery<Pilsa> query = new JPAQuery<>(entityManager);
-
         // 기본 쿼리: pilsaId로 정렬하고 memberId로 필터링
-        JPAQuery<Pilsa> baseQuery = query
+        JPAQuery<Pilsa> baseQuery = queryFactory
                 .select(pilsa)
                 .from(pilsa)
                 .where(pilsa.deleteDate.isNull());
@@ -51,5 +54,23 @@ public class PilsaQRepositoryImpl implements PilsaQRepository {
                             .fetchFirst()
             );
         }
+    }
+
+    @Override
+    public Page<Pilsa> findPilsaListSortedByLikes(Pageable pageable) {
+        List<Pilsa> results = queryFactory.selectFrom(pilsa)
+                .leftJoin(pilsa.likes, like)
+                .where(pilsa.deleteDate.isNull())
+                .where(pilsa.privateType.eq(YN.N))
+                .groupBy(pilsa)
+                .orderBy(like.count().desc())
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize())
+                .fetch();
+
+        long total = queryFactory.selectFrom(pilsa)
+                .fetch().size();
+
+        return new PageImpl<>(results, pageable, total);
     }
 }
