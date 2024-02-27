@@ -12,6 +12,7 @@ import potenday.pilsa.global.dto.request.RequestPageDto;
 import potenday.pilsa.login.Auth;
 import potenday.pilsa.pilsa.dto.request.RequestGetPilsa;
 import potenday.pilsa.pilsa.dto.request.RequestPilsaInfoDto;
+import potenday.pilsa.pilsa.dto.request.RequestPilsaList;
 import potenday.pilsa.pilsa.dto.response.ResponsePilsaDetailDto;
 import potenday.pilsa.pilsa.dto.response.ResponsePilsaIncludeDetailDto;
 import potenday.pilsa.pilsa.dto.response.ResponsePilsaListDto;
@@ -28,9 +29,9 @@ public class PilsaController {
     private final PilsaService pilsaService;
 
     @Operation(summary = "메인 페이지 전체 필사 리스트 조회(페이징처리)", description = "등록일 기준 내림차순 나열")
-    @GetMapping("list")
+    @GetMapping("/list")
     public ResponseEntity<ResponsePilsaListDto> getPilsaList(
-            @Valid RequestPageDto request,
+            @Valid RequestPilsaList request,
             @Parameter(hidden = true) @Auth(required = false) Long memberId) {
 
         ResponsePilsaListDto pilsaMainListDto = pilsaService.getAllPilsalList(request, memberId);
@@ -51,7 +52,7 @@ public class PilsaController {
     }
 
     @Operation(summary = "필사 상세정보 조회", description = "")
-    @GetMapping("{pilsaId}")
+    @GetMapping("/{pilsaId}")
     public ResponseEntity<ResponsePilsaIncludeDetailDto> getPilsaDetail(
             @Parameter(hidden = true) @Auth(required = false) Long memberId,
             @PathVariable("pilsaId") Long pilsaId,
@@ -74,7 +75,7 @@ public class PilsaController {
 
 
     @Operation(summary = "필사 수정", description = "")
-    @PutMapping("{pilsaId}")
+    @PutMapping("/{pilsaId}")
     public ResponseEntity<?> updatePilsaInfo(
             @Parameter(hidden = true) @Auth Long memberId,
             @PathVariable("pilsaId") Long pilsaId,
@@ -87,7 +88,7 @@ public class PilsaController {
 
 
     @Operation(summary = "필사 삭제", description = "")
-    @DeleteMapping("{pilsaId}")
+    @DeleteMapping("/{pilsaId}")
     public ResponseEntity<Void> deletePilsaInfo(
             @Parameter(hidden = true) @PathVariable Long pilsaId,
             @Auth Long memberId) {
