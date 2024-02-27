@@ -53,9 +53,11 @@ public class ResponsePilsaIncludeDetailDto {
     private ResponseNextPreviousPilsaDto previousPilsa;
     @Schema(description = "내가 좋아요한 여부")
     private Boolean isLikedAble;
+    @Schema(description = "좋아요 개수")
+    private Integer likeCount;
 
     @Builder
-    public ResponsePilsaIncludeDetailDto(Long pilsaId, String title, String author, String publisher, YN privateType, String textContents, String backgroundImageUrl, String backgroundColor, LocalDateTime registDate, LocalDateTime updateDate, List<ResponseCategoryDto> categoryLists, List<ResponseImagetDto> pilsaImages, MemberInfoResponse memberInfoResponse, Boolean isNextPilsa, Boolean isPreviousPilsa, ResponseNextPreviousPilsaDto nextPilsa, ResponseNextPreviousPilsaDto previousPilsa, Boolean isLiked) {
+    public ResponsePilsaIncludeDetailDto(Long pilsaId, String title, String author, String publisher, YN privateType, String textContents, String backgroundImageUrl, String backgroundColor, LocalDateTime registDate, LocalDateTime updateDate, List<ResponseCategoryDto> categoryLists, List<ResponseImagetDto> pilsaImages, MemberInfoResponse memberInfoResponse, Boolean isNextPilsa, Boolean isPreviousPilsa, ResponseNextPreviousPilsaDto nextPilsa, ResponseNextPreviousPilsaDto previousPilsa, Boolean isLikedAble, Integer likeCount) {
         this.pilsaId = pilsaId;
         this.title = title;
         this.author = author;
@@ -73,7 +75,8 @@ public class ResponsePilsaIncludeDetailDto {
         this.isPreviousPilsa = isPreviousPilsa;
         this.nextPilsa = nextPilsa;
         this.previousPilsa = previousPilsa;
-        this.isLikedAble = isLiked;
+        this.isLikedAble = isLikedAble;
+        this.likeCount = likeCount;
     }
 
     public static ResponsePilsaIncludeDetailDto from(Pilsa pilsa, Optional<Pilsa> nextPilsa, Optional<Pilsa> previousPilsa, Boolean isLiked) {
@@ -105,7 +108,8 @@ public class ResponsePilsaIncludeDetailDto {
                 .isPreviousPilsa(previousPilsa.isPresent())
                 .nextPilsa(nextPilsa.map(ResponseNextPreviousPilsaDto::from).orElse(null))
                 .previousPilsa(previousPilsa.map(ResponseNextPreviousPilsaDto::from).orElse(null))
-                .isLiked(isLiked)
+                .isLikedAble(isLiked)
+                .likeCount(pilsa.getLikes().size())
                 .build();
     }
 }
