@@ -46,9 +46,11 @@ public class ResponsePilsaDetailDto {
     private MemberInfoResponse memberInfoResponse;
     @Schema(description = "내가 좋아요한 여부")
     private Boolean isLikedAble;
+    @Schema(description = "좋아요 개수")
+    private Integer likeCount;
 
     @Builder
-    public ResponsePilsaDetailDto(Long pilsaId, String title, String author, String publisher, YN privateType, String textContents, String backgroundImageUrl, String backgroundColor, LocalDateTime registDate, LocalDateTime updateDate, List<ResponseCategoryDto> categoryLists, List<ResponseImagetDto> pilsaImages, MemberInfoResponse memberInfoResponse, Boolean isLikedAble) {
+    public ResponsePilsaDetailDto(Long pilsaId, String title, String author, String publisher, YN privateType, String textContents, String backgroundImageUrl, String backgroundColor, LocalDateTime registDate, LocalDateTime updateDate, List<ResponseCategoryDto> categoryLists, List<ResponseImagetDto> pilsaImages, MemberInfoResponse memberInfoResponse, Boolean isLikedAble, Integer likeCount) {
         this.pilsaId = pilsaId;
         this.title = title;
         this.author = author;
@@ -63,6 +65,7 @@ public class ResponsePilsaDetailDto {
         this.pilsaImages = pilsaImages;
         this.memberInfoResponse = memberInfoResponse;
         this.isLikedAble = isLikedAble;
+        this.likeCount = likeCount;
     }
 
     public static ResponsePilsaDetailDto from(Pilsa pilsa, Boolean isLikedAble) {
@@ -91,6 +94,7 @@ public class ResponsePilsaDetailDto {
                 .memberInfoResponse(member)
                 .pilsaImages(responseImagetDtos)
                 .isLikedAble(isLikedAble)
+                .likeCount(pilsa.getLikes().size())
                 .build();
     }
 }

@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.*;
 import potenday.pilsa.global.exception.BadRequestException;
 import potenday.pilsa.global.exception.ExceptionCode;
+import potenday.pilsa.like.domain.Like;
 import potenday.pilsa.member.domain.Member;
 import potenday.pilsa.pilsa.dto.request.RequestPilsaInfoDto;
 import potenday.pilsa.pilsaImage.domain.PilsaImage;
@@ -78,6 +79,9 @@ public class Pilsa {
     private LocalDateTime updateDate;
 
     private LocalDateTime deleteDate;
+
+    @OneToMany(mappedBy = "pilsa", cascade = CascadeType.DETACH)
+    private List<Like> likes;
 
     @Builder
     public Pilsa(String title, Member member,String author, String publisher, String textContents, String backgroundImageUrl, String backgroundColor, RequestPilsaInfoDto requestPilsaInfoDto) {

@@ -17,6 +17,7 @@ import potenday.pilsa.pilsa.domain.YN;
 import potenday.pilsa.pilsa.domain.repository.PilsaRepository;
 import potenday.pilsa.pilsa.dto.request.RequestGetPilsa;
 import potenday.pilsa.pilsa.dto.request.RequestPilsaInfoDto;
+import potenday.pilsa.pilsa.dto.request.RequestPilsaList;
 import potenday.pilsa.pilsa.dto.response.ResponsePilsaDetailDto;
 import potenday.pilsa.pilsa.dto.response.ResponsePilsaIncludeDetailDto;
 import potenday.pilsa.pilsa.dto.response.ResponsePilsaListDto;
@@ -48,8 +49,13 @@ public class PilsaService {
     private final LikeRepository likeRepository;
 
     @Transactional(readOnly = true)
-    public ResponsePilsaListDto getAllPilsalList(RequestPageDto request, Long memberId) {
-        Page<Pilsa> pilsas = pilsaRepository.findByPrivateTypeAndDeleteDateIsNullOrderByRegistDateDesc(YN.N, request.toPageable());
+    public ResponsePilsaListDto getAllPilsalList(RequestPilsaList request, Long memberId) {
+        Page<Pilsa> pilsas = (request.getPilsaListType() == null) ?
+                pilsaRepository.findByPrivateTypeAndDeleteDateIsNullOrderByRegistDateDesc(YN.N, request.toPageable()) :
+                switch (request.getPilsaListType()) {
+                    case FASTEST -> pilsaRepository.findByPrivateTypeAndDeleteDateIsNullOrderByRegistDateDesc(YN.N, request.toPageable());
+                    case POPULAR -> pilsaRepository.findPilsaListSortedByLikes(request.toPageable());
+                };
 
         return ResponsePilsaListDto.from(getPilsaDetailResponseDto(pilsas.getContent(), memberId), pilsas.getTotalElements());
     }
