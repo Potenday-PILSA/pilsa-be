@@ -8,6 +8,7 @@ import org.springframework.transaction.annotation.Transactional;
 import potenday.pilsa.global.dto.request.RequestPageDto;
 import potenday.pilsa.global.exception.BadRequestException;
 import potenday.pilsa.global.exception.ExceptionCode;
+import potenday.pilsa.global.util.LocalDateUtil;
 import potenday.pilsa.like.domain.repository.LikeRepository;
 import potenday.pilsa.member.domain.Member;
 import potenday.pilsa.member.domain.Status;
@@ -15,9 +16,11 @@ import potenday.pilsa.member.domain.repository.MemberRepository;
 import potenday.pilsa.pilsa.domain.Pilsa;
 import potenday.pilsa.pilsa.domain.YN;
 import potenday.pilsa.pilsa.domain.repository.PilsaRepository;
+import potenday.pilsa.pilsa.dto.request.RequestCalenderPilsa;
 import potenday.pilsa.pilsa.dto.request.RequestGetPilsa;
 import potenday.pilsa.pilsa.dto.request.RequestPilsaInfoDto;
 import potenday.pilsa.pilsa.dto.request.RequestPilsaList;
+import potenday.pilsa.pilsa.dto.response.ResponseCalenderPilsa;
 import potenday.pilsa.pilsa.dto.response.ResponsePilsaDetailDto;
 import potenday.pilsa.pilsa.dto.response.ResponsePilsaIncludeDetailDto;
 import potenday.pilsa.pilsa.dto.response.ResponsePilsaListDto;
@@ -148,6 +151,13 @@ public class PilsaService {
         relationPilsaCategoryRepository.deleteByPilsa_PilsaId(pilsaId);
 
         return ResponsePilsaDetailDto.from(pilsaSave(requestPilsaInfoDto, pilsa), isLikeAblePilsa(memberId, pilsaId));
+    }
+
+    public List<ResponseCalenderPilsa> getCalenderPilsaList(RequestCalenderPilsa request, Long memberId) {
+        List<Pilsa> pilsas
+                = pilsaRepository.findByMember_IdAndRegistDateBetweenAndDeleteDateIsNullOrderByRegistDateAsc(memberId, LocalDateUtil.startLocalDateToTime(request.getStartDt()), LocalDateUtil.endLocalDateToTime(request.getEndDt()));
+
+        return ResponseCalenderPilsa.from(pilsas);
     }
 
     private List<ResponsePilsaDetailDto> getPilsaDetailResponseDto(List<Pilsa> pilsas, Long memberId) {
