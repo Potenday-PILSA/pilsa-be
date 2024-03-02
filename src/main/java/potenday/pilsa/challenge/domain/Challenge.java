@@ -38,6 +38,9 @@ public class Challenge {
     private LocalDateTime updateDate;
 
     @Column
+    private LocalDateTime deleteDate;
+
+    @Column
     private String title;
 
     @Column

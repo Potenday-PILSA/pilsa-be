@@ -1,8 +1,8 @@
 package potenday.pilsa.challenge.service;
 
-import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import potenday.pilsa.challenge.domain.Challenge;
 import potenday.pilsa.challenge.domain.repository.ChallengeRepository;
 import potenday.pilsa.challenge.dto.request.RequestCreateChallenge;
@@ -31,6 +31,13 @@ public class ChallengeService {
                 request.getDescription());
 
         challengeRepository.save(challenge);
+
+        return ResponseChallengeInfo.from(challenge);
+    }
+
+    @Transactional(readOnly = true)
+    public ResponseChallengeInfo getChallengeInfo(Long memberId, Long challengeId) {
+        Challenge challenge = challengeRepository.findByMember_IdAndDeleteDateIsNullAndId(memberId, challengeId).orElseThrow(() -> new BadRequestException(ExceptionCode.NOT_FOUND_CHALLENGE));
 
         return ResponseChallengeInfo.from(challenge);
     }

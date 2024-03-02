@@ -5,10 +5,7 @@ import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import potenday.pilsa.challenge.dto.request.RequestCreateChallenge;
 import potenday.pilsa.challenge.dto.response.ResponseChallengeInfo;
 import potenday.pilsa.challenge.service.ChallengeService;
@@ -29,6 +26,15 @@ public class ChallengeController {
             @RequestBody RequestCreateChallenge requestCreateChallenge) {
 
         return ResponseEntity.ok(challengeService.createChallenge(memberId, requestCreateChallenge));
+    }
+
+    @Operation(summary = "챌린지 상세 조회")
+    @GetMapping("/{challengeId}")
+    public ResponseEntity<ResponseChallengeInfo> getChallengeInfo(
+            @PathVariable("challengeId") Long challengeId,
+            @Parameter(hidden = true) @Auth Long memberId) {
+
+        return ResponseEntity.ok(challengeService.getChallengeInfo(memberId, challengeId));
     }
 
 }
