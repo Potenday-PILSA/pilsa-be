@@ -10,15 +10,18 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import potenday.pilsa.global.dto.request.RequestPageDto;
 import potenday.pilsa.login.Auth;
+import potenday.pilsa.pilsa.dto.request.RequestCalenderPilsa;
 import potenday.pilsa.pilsa.dto.request.RequestGetPilsa;
 import potenday.pilsa.pilsa.dto.request.RequestPilsaInfoDto;
 import potenday.pilsa.pilsa.dto.request.RequestPilsaList;
+import potenday.pilsa.pilsa.dto.response.ResponseCalenderPilsa;
 import potenday.pilsa.pilsa.dto.response.ResponsePilsaDetailDto;
 import potenday.pilsa.pilsa.dto.response.ResponsePilsaIncludeDetailDto;
 import potenday.pilsa.pilsa.dto.response.ResponsePilsaListDto;
 import potenday.pilsa.pilsa.service.PilsaService;
 
 import java.net.URI;
+import java.util.List;
 
 @Tag(name = "필사 Controller")
 @RestController
@@ -95,5 +98,14 @@ public class PilsaController {
         pilsaService.deletePilsa(pilsaId, memberId);
 
         return ResponseEntity.noContent().build();
+    }
+
+    @Operation(summary = "캘린더를 보고 필사 출력")
+    @GetMapping("/calender")
+    public ResponseEntity<List<ResponseCalenderPilsa>> calenderPilsa(
+            @Valid RequestCalenderPilsa request,
+            @Parameter(hidden = true) @Auth Long memberId) {
+
+        return ResponseEntity.ok(pilsaService.getCalenderPilsaList(request, memberId));
     }
 }
