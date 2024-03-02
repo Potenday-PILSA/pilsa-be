@@ -1,12 +1,15 @@
 package potenday.pilsa.challenge.service;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import potenday.pilsa.challenge.domain.Challenge;
 import potenday.pilsa.challenge.domain.repository.ChallengeRepository;
 import potenday.pilsa.challenge.dto.request.RequestCreateChallenge;
 import potenday.pilsa.challenge.dto.response.ResponseChallengeInfo;
+import potenday.pilsa.challenge.dto.response.ResponseChallengeList;
+import potenday.pilsa.global.dto.request.RequestPageDto;
 import potenday.pilsa.global.exception.BadRequestException;
 import potenday.pilsa.global.exception.ExceptionCode;
 import potenday.pilsa.global.util.LocalDateUtil;
@@ -40,6 +43,13 @@ public class ChallengeService {
         Challenge challenge = challengeRepository.findByMember_IdAndDeleteDateIsNullAndId(memberId, challengeId).orElseThrow(() -> new BadRequestException(ExceptionCode.NOT_FOUND_CHALLENGE));
 
         return ResponseChallengeInfo.from(challenge);
+    }
+
+    @Transactional(readOnly = true)
+    public ResponseChallengeList getChallengeList(Long memberId, RequestPageDto requestPageDto) {
+        Page<Challenge> challenges = challengeRepository.findByMember_IdAndDeleteDateIsNullOrderByRegistDateDesc(memberId, requestPageDto.toPageable());
+
+        return ResponseChallengeList.from(challenges);
     }
 
     private Member getMember(Long memberId) {

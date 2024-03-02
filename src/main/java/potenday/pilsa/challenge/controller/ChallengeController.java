@@ -3,12 +3,15 @@ package potenday.pilsa.challenge.controller;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import potenday.pilsa.challenge.dto.request.RequestCreateChallenge;
 import potenday.pilsa.challenge.dto.response.ResponseChallengeInfo;
+import potenday.pilsa.challenge.dto.response.ResponseChallengeList;
 import potenday.pilsa.challenge.service.ChallengeService;
+import potenday.pilsa.global.dto.request.RequestPageDto;
 import potenday.pilsa.login.Auth;
 
 @Tag(name = "챌린지")
@@ -35,6 +38,15 @@ public class ChallengeController {
             @Parameter(hidden = true) @Auth Long memberId) {
 
         return ResponseEntity.ok(challengeService.getChallengeInfo(memberId, challengeId));
+    }
+
+    @Operation(summary = "챌린지 목록 조회")
+    @GetMapping("/list")
+    public ResponseEntity<ResponseChallengeList> getChallengeList(
+            @Parameter(hidden = true) @Auth Long memberId,
+            @Valid RequestPageDto requestPageDto) {
+
+        return ResponseEntity.ok(challengeService.getChallengeList(memberId, requestPageDto));
     }
 
 }
