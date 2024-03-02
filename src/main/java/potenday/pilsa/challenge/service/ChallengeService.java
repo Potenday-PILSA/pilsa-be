@@ -52,6 +52,13 @@ public class ChallengeService {
         return ResponseChallengeList.from(challenges);
     }
 
+    @Transactional
+    public void deleteChallenge(Long memberId, Long challengeId) {
+        Challenge challenge = challengeRepository.findByMember_IdAndDeleteDateIsNullAndId(memberId, challengeId).orElseThrow(() -> new BadRequestException(ExceptionCode.NOT_FOUND_CHALLENGE));
+
+        challenge.deleteChallenge();
+    }
+
     private Member getMember(Long memberId) {
         return memberRepository.findByIdAndStatus(memberId, Status.ACTIVE).orElseThrow(() -> new BadRequestException(ExceptionCode.NOT_FOUND_MEMBER));
     }

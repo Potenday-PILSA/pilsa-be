@@ -49,4 +49,15 @@ public class ChallengeController {
         return ResponseEntity.ok(challengeService.getChallengeList(memberId, requestPageDto));
     }
 
+    @Operation(summary = "챌린지 삭제")
+    @DeleteMapping("/{challengeId}")
+    public ResponseEntity<Void> deleteChallenge(
+            @Parameter(hidden = true) @Auth Long memberId,
+            @PathVariable("challengeId") Long challengeId) {
+
+        challengeService.deleteChallenge(memberId, challengeId);
+
+        return ResponseEntity.noContent().build();
+    }
+
 }
