@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import potenday.pilsa.challenge.service.ChallengeService;
 import potenday.pilsa.global.exception.BadRequestException;
 import potenday.pilsa.global.exception.ExceptionCode;
 import potenday.pilsa.member.domain.Member;
@@ -70,5 +71,9 @@ public class Challenge {
         } else {
             throw new BadRequestException(ExceptionCode.FAIL_DATE_CHALLENGE);
         }
+    }
+
+    public void deleteChallenge() {
+        this.deleteDate = LocalDateTime.now();
     }
 }
