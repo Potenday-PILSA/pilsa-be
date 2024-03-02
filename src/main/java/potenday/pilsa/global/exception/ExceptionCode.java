@@ -25,6 +25,9 @@ public enum ExceptionCode {
     INVALID_IMAGE_FILE(6001, "이미지 파일을 업로드해주세요."),
     INVALID_IMAGE_PATH(6002, "유효하지 않은 이미지 경로입니다."),
     FAIL_TO_UPLOAD_IMAGE(6003, "이미지 파일 업로드에 실패했습니다."),
+
+    FAIL_DATE_CHALLENGE(7001, "유효하지 않은 날짜 입니다."),
+
     INTERNAL_SEVER_ERROR(9999, "서버 에러가 발생하였습니다. 관리자에게 문의해 주세요.");
 
     private final int code;
