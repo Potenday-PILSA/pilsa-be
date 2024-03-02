@@ -32,7 +32,6 @@ import potenday.pilsa.pilsaImage.dto.request.ImageRequest;
 import potenday.pilsa.relationPilsaCategory.domain.RelationPilsaCategory;
 import potenday.pilsa.relationPilsaCategory.domain.repository.RelationPilsaCategoryRepository;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
