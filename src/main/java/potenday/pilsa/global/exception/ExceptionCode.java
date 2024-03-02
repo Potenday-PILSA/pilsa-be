@@ -27,6 +27,7 @@ public enum ExceptionCode {
     FAIL_TO_UPLOAD_IMAGE(6003, "이미지 파일 업로드에 실패했습니다."),
 
     FAIL_DATE_CHALLENGE(7001, "유효하지 않은 날짜 입니다."),
+    NOT_FOUND_CHALLENGE(7002, "존재하지 않은 챌린지입니다."),
 
     INTERNAL_SEVER_ERROR(9999, "서버 에러가 발생하였습니다. 관리자에게 문의해 주세요.");
 
