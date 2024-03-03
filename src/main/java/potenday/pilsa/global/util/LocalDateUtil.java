@@ -10,7 +10,7 @@ public class LocalDateUtil {
     }
 
     public static LocalDateTime endLocalDateToTime(LocalDate endDate) {
-        return endDate.atTime(LocalTime.MAX);
+        return endDate.atTime(23, 59, 59);
     }
 
     public static LocalDate localDateTimeToDate(LocalDateTime localDateTime) {

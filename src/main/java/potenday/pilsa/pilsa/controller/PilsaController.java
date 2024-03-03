@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import potenday.pilsa.global.dto.request.RequestPageDto;
 import potenday.pilsa.login.Auth;
+import potenday.pilsa.pilsa.domain.Pilsa;
 import potenday.pilsa.pilsa.dto.request.RequestCalenderPilsa;
 import potenday.pilsa.pilsa.dto.request.RequestGetPilsa;
 import potenday.pilsa.pilsa.dto.request.RequestPilsaInfoDto;
@@ -71,9 +72,9 @@ public class PilsaController {
             @Parameter(hidden = true) @Auth Long memberId,
             @RequestBody @Valid RequestPilsaInfoDto request) {
 
-        ResponsePilsaDetailDto pilsaDetailDto = pilsaService.createPilsa(memberId, request);
+        Long pilsaId = pilsaService.createPilsa(memberId, request);
 
-        return ResponseEntity.ok(pilsaDetailDto);
+        return ResponseEntity.created(URI.create("pilsa/" + pilsaId)).build();
     }
 
 

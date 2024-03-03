@@ -27,4 +27,6 @@ public interface PilsaRepository extends JpaRepository<Pilsa, Long>, PilsaQRepos
 
     List<Pilsa> findByMember_IdAndRegistDateBetweenAndDeleteDateIsNullOrderByRegistDateAsc(Long member_id, LocalDateTime startDate, LocalDateTime endDate);
 
+    List<Pilsa> findByMember_IdAndRegistDateBetweenAndDeleteDateIsNull(Long member_id, LocalDateTime registDate, LocalDateTime registDate2);
+
 }

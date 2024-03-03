@@ -105,7 +105,7 @@ public class PilsaService {
     }
 
     @Transactional
-    public ResponsePilsaDetailDto createPilsa(Long memberId, RequestPilsaInfoDto request) {
+    public Long createPilsa(Long memberId, RequestPilsaInfoDto request) {
         Member member = getMember(memberId);
 
         Pilsa pilsa = new Pilsa(
@@ -118,9 +118,7 @@ public class PilsaService {
                 request.getBackgroundColor(),
                 request);
 
-        Pilsa savePilsa = pilsaSave(request, pilsa);
-
-        return ResponsePilsaDetailDto.from(savePilsa, isLikeAblePilsa(memberId, savePilsa.getPilsaId()));
+        return pilsaSave(request, pilsa).getPilsaId();
     }
 
     public Pilsa pilsaSave(RequestPilsaInfoDto request, Pilsa pilsa) {
