@@ -11,6 +11,8 @@ import potenday.pilsa.global.util.LocalDateUtil;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -51,5 +53,11 @@ public class ResponseChallengeInfo {
                 .description(challenge.getDescription())
                 .status(challenge.getStatus())
                 .build();
+    }
+
+    public static List<ResponseChallengeInfo> from(List<Challenge> challenges) {
+        return challenges.stream()
+                .map(ResponseChallengeInfo::from)
+                .collect(Collectors.toList());
     }
 }

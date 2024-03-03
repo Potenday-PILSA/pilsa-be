@@ -7,10 +7,12 @@ import lombok.NoArgsConstructor;
 import potenday.pilsa.challenge.service.ChallengeService;
 import potenday.pilsa.global.exception.BadRequestException;
 import potenday.pilsa.global.exception.ExceptionCode;
+import potenday.pilsa.global.util.LocalDateUtil;
 import potenday.pilsa.member.domain.Member;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 
 @Entity
 @Getter
@@ -75,5 +77,22 @@ public class Challenge {
 
     public void deleteChallenge() {
         this.deleteDate = LocalDateTime.now();
+    }
+
+    public void setStatus() {
+        this.status = setStatue(this.startDate, this.endDate);
+    }
+
+    public void changeStatueSuccessOrFail(Long pilsaCount) {
+        LocalDate startDate = LocalDateUtil.localDateTimeToDate(this.startDate);
+        LocalDate endDate = LocalDateUtil.localDateTimeToDate(this.endDate);
+
+        long daysBetween = ChronoUnit.DAYS.between(startDate, endDate) + 1;
+
+        if (daysBetween == pilsaCount) {
+            this.status = Status.SUCCESS;
+        } else {
+            this.status = Status.FAIL;
+        }
     }
 }

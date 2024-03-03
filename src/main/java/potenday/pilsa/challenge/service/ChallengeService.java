@@ -16,6 +16,16 @@ import potenday.pilsa.global.util.LocalDateUtil;
 import potenday.pilsa.member.domain.Member;
 import potenday.pilsa.member.domain.Status;
 import potenday.pilsa.member.domain.repository.MemberRepository;
+import potenday.pilsa.pilsa.domain.repository.PilsaRepository;
+
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
+
+import static potenday.pilsa.challenge.domain.Status.EXPECTED;
+import static potenday.pilsa.challenge.domain.Status.ING;
 
 @Service
 @RequiredArgsConstructor
@@ -23,6 +33,7 @@ public class ChallengeService {
 
     private final ChallengeRepository challengeRepository;
     private final MemberRepository memberRepository;
+    private final PilsaRepository pilsaRepository;
 
     @Transactional
     public ResponseChallengeInfo createChallenge(Long memberId, RequestCreateChallenge request) {
@@ -57,6 +68,44 @@ public class ChallengeService {
         Challenge challenge = challengeRepository.findByMember_IdAndDeleteDateIsNullAndId(memberId, challengeId).orElseThrow(() -> new BadRequestException(ExceptionCode.NOT_FOUND_CHALLENGE));
 
         challenge.deleteChallenge();
+    }
+
+    @Transactional
+    public List<ResponseChallengeInfo> changeStatue(Long memberId) {
+        LocalDateTime startDate =  LocalDateUtil.startLocalDateToTime(LocalDate.now());
+        LocalDateTime endDate = LocalDateUtil.endLocalDateToTime(LocalDate.now());
+
+        List<Challenge> challenges = challengeRepository.findByMember_IdAndDeleteDateIsNullAndStatusAndEndDateIsBetween(memberId, ING, startDate, endDate);
+
+        if (challenges.isEmpty()) {
+            return new ArrayList<>();
+        }
+
+        challenges.forEach(
+                challenge -> {
+                    long pilsaCount = pilsaRepository.findByMember_IdAndRegistDateBetweenAndDeleteDateIsNull(memberId, challenge.getStartDate(), challenge.getEndDate())
+                            .stream()
+                            .map(pilsa -> pilsa.getRegistDate().toLocalDate())
+                            .distinct()
+                            .count();
+
+                    System.out.println("pilsaCount = " + pilsaCount);
+
+                    challenge.changeStatueSuccessOrFail(pilsaCount);
+                }
+        );
+
+        return ResponseChallengeInfo.from(challenges);
+    }
+
+
+
+    @Transactional
+    public void changeStatueIng() {
+        LocalDate day = LocalDate.now();
+        List<Challenge> challenges = challengeRepository.findByDeleteDateIsNullAndStatusAndStartDateIsBefore(EXPECTED, LocalDateUtil.endLocalDateToTime(day));
+
+        challenges.forEach(Challenge::setStatus);
     }
 
     private Member getMember(Long memberId) {

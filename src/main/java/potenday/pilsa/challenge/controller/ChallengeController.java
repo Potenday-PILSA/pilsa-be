@@ -14,6 +14,8 @@ import potenday.pilsa.challenge.service.ChallengeService;
 import potenday.pilsa.global.dto.request.RequestPageDto;
 import potenday.pilsa.login.Auth;
 
+import java.util.List;
+
 @Tag(name = "챌린지")
 @RestController
 @RequiredArgsConstructor
@@ -60,4 +62,11 @@ public class ChallengeController {
         return ResponseEntity.noContent().build();
     }
 
+    @Operation(summary = "챌린지 상태 변화")
+    @PostMapping("/change-statue")
+    public ResponseEntity<List<ResponseChallengeInfo>> changeStatue(
+            @Parameter(hidden = true) @Auth Long memberId) {
+
+        return ResponseEntity.ok(challengeService.changeStatue(memberId));
+    }
 }
