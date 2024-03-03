@@ -71,7 +71,7 @@ public class ChallengeService {
     }
 
     @Transactional
-    public List<ResponseChallengeInfo> changeStatue(Long memberId) {
+    public List<ResponseChallengeInfo> changeINGStatueSuccessOrFail(Long memberId) {
         LocalDateTime startDate =  LocalDateUtil.startLocalDateToTime(LocalDate.now());
         LocalDateTime endDate = LocalDateUtil.endLocalDateToTime(LocalDate.now());
 
@@ -88,8 +88,6 @@ public class ChallengeService {
                             .map(pilsa -> pilsa.getRegistDate().toLocalDate())
                             .distinct()
                             .count();
-
-                    System.out.println("pilsaCount = " + pilsaCount);
 
                     challenge.changeStatueSuccessOrFail(pilsaCount);
                 }
