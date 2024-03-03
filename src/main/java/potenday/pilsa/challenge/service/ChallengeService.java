@@ -52,6 +52,7 @@ public class ChallengeService {
     @Transactional(readOnly = true)
     public ResponseChallengeInfo getChallengeInfo(Long memberId, Long challengeId) {
         Challenge challenge = challengeRepository.findByMember_IdAndDeleteDateIsNullAndId(memberId, challengeId).orElseThrow(() -> new BadRequestException(ExceptionCode.NOT_FOUND_CHALLENGE));
+        changeINGStatueSuccessOrFail(memberId);
 
         return ResponseChallengeInfo.from(challenge);
     }
@@ -59,6 +60,7 @@ public class ChallengeService {
     @Transactional(readOnly = true)
     public ResponseChallengeList getChallengeList(Long memberId, RequestPageDto requestPageDto) {
         Page<Challenge> challenges = challengeRepository.findByMember_IdAndDeleteDateIsNullOrderByRegistDateDesc(memberId, requestPageDto.toPageable());
+        changeINGStatueSuccessOrFail(memberId);
 
         return ResponseChallengeList.from(challenges);
     }
@@ -95,8 +97,6 @@ public class ChallengeService {
 
         return ResponseChallengeInfo.from(challenges);
     }
-
-
 
     @Transactional
     public void changeStatueIng() {
