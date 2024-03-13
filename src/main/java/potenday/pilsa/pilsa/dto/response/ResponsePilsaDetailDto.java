@@ -44,13 +44,15 @@ public class ResponsePilsaDetailDto {
     private List<ResponseImagetDto> pilsaImages;
     @Schema(description = "회원 정보")
     private MemberInfoResponse memberInfoResponse;
+    @Schema(description = "내가 좋아요한 여부")
+    private Boolean isLikedAble;
+    @Schema(description = "좋아요 개수")
+    private Integer likeCount;
 
     @Builder
-    public ResponsePilsaDetailDto(Long pilsaId, MemberInfoResponse memberInfoResponse, String title, List<ResponseCategoryDto> categoryLists, String author, String publisher, YN privateType, String textContents, String backgroundImageUrl, String backgroundColor, LocalDateTime registDate, LocalDateTime updateDate, List<ResponseImagetDto> pilsaImages) {
+    public ResponsePilsaDetailDto(Long pilsaId, String title, String author, String publisher, YN privateType, String textContents, String backgroundImageUrl, String backgroundColor, LocalDateTime registDate, LocalDateTime updateDate, List<ResponseCategoryDto> categoryLists, List<ResponseImagetDto> pilsaImages, MemberInfoResponse memberInfoResponse, Boolean isLikedAble, Integer likeCount) {
         this.pilsaId = pilsaId;
-        this.memberInfoResponse = memberInfoResponse;
         this.title = title;
-        this.categoryLists = categoryLists;
         this.author = author;
         this.publisher = publisher;
         this.privateType = privateType;
@@ -59,10 +61,14 @@ public class ResponsePilsaDetailDto {
         this.backgroundColor = backgroundColor;
         this.registDate = registDate;
         this.updateDate = updateDate;
+        this.categoryLists = categoryLists;
         this.pilsaImages = pilsaImages;
+        this.memberInfoResponse = memberInfoResponse;
+        this.isLikedAble = isLikedAble;
+        this.likeCount = likeCount;
     }
 
-    public static ResponsePilsaDetailDto from(Pilsa pilsa) {
+    public static ResponsePilsaDetailDto from(Pilsa pilsa, Boolean isLikedAble) {
         MemberInfoResponse member = MemberInfoResponse.from(pilsa.getMember());
         List<ResponseCategoryDto> responseCategoryDtos = pilsa.getRelationPilsaCategories()
                 .stream()
@@ -72,8 +78,6 @@ public class ResponsePilsaDetailDto {
                 .stream()
                 .map(ResponseImagetDto::from)
                 .toList();
-
-        System.out.println("pilsa.getPilsaId() = " + pilsa.getPilsaId());
 
         return ResponsePilsaDetailDto.builder()
                 .pilsaId(pilsa.getPilsaId())
@@ -89,6 +93,8 @@ public class ResponsePilsaDetailDto {
                 .categoryLists(responseCategoryDtos)
                 .memberInfoResponse(member)
                 .pilsaImages(responseImagetDtos)
+                .isLikedAble(isLikedAble)
+                .likeCount(pilsa.getLikes().size())
                 .build();
     }
 }

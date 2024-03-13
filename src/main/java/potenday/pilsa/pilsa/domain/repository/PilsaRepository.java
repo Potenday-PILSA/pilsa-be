@@ -6,6 +6,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import potenday.pilsa.pilsa.domain.Pilsa;
 import potenday.pilsa.pilsa.domain.YN;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -23,5 +24,9 @@ public interface PilsaRepository extends JpaRepository<Pilsa, Long>, PilsaQRepos
     Optional<Pilsa> findByMember_IdAndDeleteDateIsNullAndPilsaId(Long member_id, Long pilsaId);
 
     Page<Pilsa> findByMember_IdAndDeleteDateIsNullOrderByRegistDateDesc(Long memberId, Pageable pageable);
+
+    List<Pilsa> findByMember_IdAndRegistDateBetweenAndDeleteDateIsNullOrderByRegistDateAsc(Long member_id, LocalDateTime startDate, LocalDateTime endDate);
+
+    List<Pilsa> findByMember_IdAndRegistDateBetweenAndDeleteDateIsNull(Long member_id, LocalDateTime registDate, LocalDateTime registDate2);
 
 }

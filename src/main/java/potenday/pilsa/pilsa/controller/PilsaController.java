@@ -10,14 +10,19 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import potenday.pilsa.global.dto.request.RequestPageDto;
 import potenday.pilsa.login.Auth;
+import potenday.pilsa.pilsa.domain.Pilsa;
+import potenday.pilsa.pilsa.dto.request.RequestCalenderPilsa;
 import potenday.pilsa.pilsa.dto.request.RequestGetPilsa;
 import potenday.pilsa.pilsa.dto.request.RequestPilsaInfoDto;
+import potenday.pilsa.pilsa.dto.request.RequestPilsaList;
+import potenday.pilsa.pilsa.dto.response.ResponseCalenderPilsa;
 import potenday.pilsa.pilsa.dto.response.ResponsePilsaDetailDto;
 import potenday.pilsa.pilsa.dto.response.ResponsePilsaIncludeDetailDto;
-import potenday.pilsa.pilsa.dto.response.ResponsePilsaMainListDto;
+import potenday.pilsa.pilsa.dto.response.ResponsePilsaListDto;
 import potenday.pilsa.pilsa.service.PilsaService;
 
 import java.net.URI;
+import java.util.List;
 
 @Tag(name = "필사 Controller")
 @RestController
@@ -28,10 +33,12 @@ public class PilsaController {
     private final PilsaService pilsaService;
 
     @Operation(summary = "메인 페이지 전체 필사 리스트 조회(페이징처리)", description = "등록일 기준 내림차순 나열")
-    @GetMapping("list")
-    public ResponseEntity<ResponsePilsaMainListDto> getPilsaList(@Valid RequestPageDto request) {
+    @GetMapping("/list")
+    public ResponseEntity<ResponsePilsaListDto> getPilsaList(
+            @Valid RequestPilsaList request,
+            @Parameter(hidden = true) @Auth(required = false) Long memberId) {
 
-        ResponsePilsaMainListDto pilsaMainListDto = pilsaService.getAllPilsalList(request);
+        ResponsePilsaListDto pilsaMainListDto = pilsaService.getAllPilsalList(request, memberId);
 
         return ResponseEntity.ok(pilsaMainListDto);
     }
@@ -39,17 +46,17 @@ public class PilsaController {
 
     @Operation(summary = "내가 쓴 필사 리스트 조회(페이징처리)", description = "등록일 기준 내림차순 나열")
     @GetMapping
-    public ResponseEntity<ResponsePilsaMainListDto> getPilsaListOfMember(
+    public ResponseEntity<ResponsePilsaListDto> getPilsaListOfMember(
             @Parameter(hidden = true) @Auth Long memberId,
             @Valid RequestPageDto request) {
 
-        ResponsePilsaMainListDto pilsaMainListDto = pilsaService.getPilsalListOfMember(memberId, request);
+        ResponsePilsaListDto pilsaMainListDto = pilsaService.getPilsalListOfMember(memberId, request);
 
         return ResponseEntity.ok(pilsaMainListDto);
     }
 
     @Operation(summary = "필사 상세정보 조회", description = "")
-    @GetMapping("{pilsaId}")
+    @GetMapping("/{pilsaId}")
     public ResponseEntity<ResponsePilsaIncludeDetailDto> getPilsaDetail(
             @Parameter(hidden = true) @Auth(required = false) Long memberId,
             @PathVariable("pilsaId") Long pilsaId,
@@ -65,14 +72,14 @@ public class PilsaController {
             @Parameter(hidden = true) @Auth Long memberId,
             @RequestBody @Valid RequestPilsaInfoDto request) {
 
-        ResponsePilsaDetailDto pilsaDetailDto = pilsaService.createPilsa(memberId, request);
+        Long pilsaId = pilsaService.createPilsa(memberId, request);
 
-        return ResponseEntity.ok(pilsaDetailDto);
+        return ResponseEntity.created(URI.create("pilsa/" + pilsaId)).build();
     }
 
 
     @Operation(summary = "필사 수정", description = "")
-    @PutMapping("{pilsaId}")
+    @PutMapping("/{pilsaId}")
     public ResponseEntity<?> updatePilsaInfo(
             @Parameter(hidden = true) @Auth Long memberId,
             @PathVariable("pilsaId") Long pilsaId,
@@ -85,12 +92,21 @@ public class PilsaController {
 
 
     @Operation(summary = "필사 삭제", description = "")
-    @DeleteMapping("{pilsaId}")
+    @DeleteMapping("/{pilsaId}")
     public ResponseEntity<Void> deletePilsaInfo(
             @Parameter(hidden = true) @PathVariable Long pilsaId,
             @Auth Long memberId) {
         pilsaService.deletePilsa(pilsaId, memberId);
 
         return ResponseEntity.noContent().build();
+    }
+
+    @Operation(summary = "캘린더를 보고 필사 출력")
+    @GetMapping("/calender")
+    public ResponseEntity<List<ResponseCalenderPilsa>> calenderPilsa(
+            @Valid RequestCalenderPilsa request,
+            @Parameter(hidden = true) @Auth Long memberId) {
+
+        return ResponseEntity.ok(pilsaService.getCalenderPilsaList(request, memberId));
     }
 }

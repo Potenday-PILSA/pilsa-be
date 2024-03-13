@@ -36,7 +36,7 @@ public class MemberController {
         return ResponseEntity.ok(memberService.getMemberInfo(memberId));
     }
 
-    @Operation(summary = "회원의 소개글을 변경하는 API", description = "")
+    @Operation(summary = "회원의 정보를 변경하는 API", description = "")
     @PutMapping("/member")
     public ResponseEntity<MemberInfoResponse> modifyMemberInfo(
             @Parameter(hidden = true) @Auth Long memberId,
@@ -73,6 +73,7 @@ public class MemberController {
 
         return ResponseEntity.ok(tokenPair);
     }
+
 
 
 }
