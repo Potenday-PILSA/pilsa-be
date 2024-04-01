@@ -125,7 +125,7 @@ public class PilsaService {
         validationCategoryCount(request.getCategoryCd());
         validationImageCount(request.getImages());
 
-        List<PilsaCategory> categoryList = pilsaCategoryRepository.findByCategoryCdIn(request.getCategoryCd());
+        List<PilsaCategory> categoryList = pilsaCategoryRepository.findByCategoryCdInAndUseYn(request.getCategoryCd(), potenday.pilsa.pilsaCategory.domain.YN.Y);
         List<RelationPilsaCategory> relationPilsaCategories = categoryList.stream()
                 .map(category -> new RelationPilsaCategory(pilsa, category)) // 생성자를 통해 RelationPilsaCategory 인스턴스 생성
                 .collect(Collectors.toList());
