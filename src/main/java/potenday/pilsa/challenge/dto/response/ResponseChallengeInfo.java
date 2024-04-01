@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 import potenday.pilsa.challenge.domain.Challenge;
 import potenday.pilsa.challenge.domain.Status;
 import potenday.pilsa.global.util.LocalDateUtil;
+import potenday.pilsa.pilsaCategory.dto.response.ResponseCategoryListDto;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -31,9 +32,11 @@ public class ResponseChallengeInfo {
     private String description;
     @Schema(description = "상태 [SUCCESS : 성공, FAIL : 실패, ING : 진행중, EXPECTED : 예정]")
     private Status status;
+    @Schema(description = "카테고리 리스트")
+    private ResponseCategoryListDto categoryListDto;
 
     @Builder
-    public ResponseChallengeInfo(Long id, LocalDate startDate, LocalDate endDate, LocalDateTime registDate, String title, String description, Status status) {
+    public ResponseChallengeInfo(Long id, LocalDate startDate, LocalDate endDate, LocalDateTime registDate, String title, String description, Status status, ResponseCategoryListDto categoryListDto) {
         this.id = id;
         this.startDate = startDate;
         this.endDate = endDate;
@@ -41,6 +44,7 @@ public class ResponseChallengeInfo {
         this.title = title;
         this.description = description;
         this.status = status;
+        this.categoryListDto = categoryListDto;
     }
 
     public static ResponseChallengeInfo from(Challenge challenge) {
@@ -52,6 +56,7 @@ public class ResponseChallengeInfo {
                 .title(challenge.getTitle())
                 .description(challenge.getDescription())
                 .status(challenge.getStatus())
+                .categoryListDto(ResponseCategoryListDto.from(challenge.getCategories()))
                 .build();
     }
 
