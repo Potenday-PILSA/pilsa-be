@@ -7,6 +7,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -19,12 +20,15 @@ public class RequestCreateChallenge {
     private String title;
     @Schema(description = "설명/다짐")
     private String description;
+    @Schema(description = "카테고리 번호 리스트")
+    private List<Long> categories;
 
     @Builder
-    public RequestCreateChallenge(LocalDate startDate, LocalDate endDate, String title, String description) {
+    public RequestCreateChallenge(LocalDate startDate, LocalDate endDate, String title, String description, List<Long> categories) {
         this.startDate = startDate;
         this.endDate = endDate;
         this.title = title;
         this.description = description;
+        this.categories = categories;
     }
 }

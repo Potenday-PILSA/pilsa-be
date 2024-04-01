@@ -4,15 +4,16 @@ import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import potenday.pilsa.challenge.service.ChallengeService;
 import potenday.pilsa.global.exception.BadRequestException;
 import potenday.pilsa.global.exception.ExceptionCode;
 import potenday.pilsa.global.util.LocalDateUtil;
 import potenday.pilsa.member.domain.Member;
+import potenday.pilsa.pilsaCategory.domain.PilsaCategory;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
+import java.util.List;
 
 @Entity
 @Getter
@@ -53,7 +54,13 @@ public class Challenge {
     @Enumerated(value = EnumType.STRING)
     private Status status;
 
-    public Challenge(Member member, LocalDateTime startDate, LocalDateTime endDate, String title, String description) {
+    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JoinTable(name = "challenge_categories",
+            inverseJoinColumns = @JoinColumn(name = "category_id"),
+            joinColumns = @JoinColumn(name = "challenge_id"))
+    private List<PilsaCategory> categories;
+
+    public Challenge(Member member, LocalDateTime startDate, LocalDateTime endDate, String title, String description, List<PilsaCategory> categories) {
         this.member = member;
         this.startDate = startDate;
         this.endDate = endDate;
@@ -61,6 +68,7 @@ public class Challenge {
         this.title = title;
         this.description = description;
         this.status = setStatue(startDate, endDate);
+        this.categories = categories;
     }
 
     public Status setStatue(LocalDateTime startDate, LocalDateTime endDate) {
