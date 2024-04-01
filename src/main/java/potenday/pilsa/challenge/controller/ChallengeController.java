@@ -14,6 +14,7 @@ import potenday.pilsa.challenge.service.ChallengeService;
 import potenday.pilsa.global.dto.request.RequestPageDto;
 import potenday.pilsa.login.Auth;
 
+import java.net.URI;
 import java.util.List;
 
 @Tag(name = "챌린지")
@@ -30,7 +31,9 @@ public class ChallengeController {
             @Parameter(hidden = true) @Auth Long memberId,
             @RequestBody RequestCreateChallenge requestCreateChallenge) {
 
-        return ResponseEntity.ok(challengeService.createChallenge(memberId, requestCreateChallenge));
+        Long challengeId = challengeService.createChallenge(memberId, requestCreateChallenge);
+
+        return ResponseEntity.created(URI.create("challenge/" + challengeId)).build();
     }
 
     @Operation(summary = "챌린지 상세 조회")

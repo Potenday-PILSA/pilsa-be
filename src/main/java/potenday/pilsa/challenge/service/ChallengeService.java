@@ -39,7 +39,7 @@ public class ChallengeService {
     private final PilsaCategoryRepository pilsaCategoryRepository;
 
     @Transactional
-    public ResponseChallengeInfo createChallenge(Long memberId, RequestCreateChallenge request) {
+    public Long createChallenge(Long memberId, RequestCreateChallenge request) {
         Challenge challenge = new Challenge(
                 getMember(memberId),
                 LocalDateUtil.startLocalDateToTime(request.getStartDate()),
@@ -51,7 +51,7 @@ public class ChallengeService {
 
         challengeRepository.save(challenge);
 
-        return ResponseChallengeInfo.from(challenge);
+        return challenge.getId();
     }
 
     @Transactional(readOnly = true)
