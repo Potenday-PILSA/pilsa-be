@@ -17,12 +17,14 @@ import potenday.pilsa.member.domain.Member;
 import potenday.pilsa.member.domain.Status;
 import potenday.pilsa.member.domain.repository.MemberRepository;
 import potenday.pilsa.pilsa.domain.repository.PilsaRepository;
+import potenday.pilsa.pilsaCategory.domain.PilsaCategory;
+import potenday.pilsa.pilsaCategory.domain.YN;
+import potenday.pilsa.pilsaCategory.domain.repository.PilsaCategoryRepository;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import static potenday.pilsa.challenge.domain.Status.EXPECTED;
 import static potenday.pilsa.challenge.domain.Status.ING;
@@ -34,6 +36,7 @@ public class ChallengeService {
     private final ChallengeRepository challengeRepository;
     private final MemberRepository memberRepository;
     private final PilsaRepository pilsaRepository;
+    private final PilsaCategoryRepository pilsaCategoryRepository;
 
     @Transactional
     public ResponseChallengeInfo createChallenge(Long memberId, RequestCreateChallenge request) {
@@ -42,7 +45,9 @@ public class ChallengeService {
                 LocalDateUtil.startLocalDateToTime(request.getStartDate()),
                 LocalDateUtil.endLocalDateToTime(request.getEndDate()),
                 request.getTitle(),
-                request.getDescription());
+                request.getDescription(),
+                getCategories(request.getCategories())
+                );
 
         challengeRepository.save(challenge);
 
@@ -110,4 +115,7 @@ public class ChallengeService {
         return memberRepository.findByIdAndStatus(memberId, Status.ACTIVE).orElseThrow(() -> new BadRequestException(ExceptionCode.NOT_FOUND_MEMBER));
     }
 
+    private List<PilsaCategory> getCategories(List<Long> categories) {
+        return pilsaCategoryRepository.findByCategoryCdInAndUseYn(categories, YN.Y);
+    }
 }
