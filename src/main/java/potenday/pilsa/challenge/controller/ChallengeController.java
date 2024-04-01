@@ -27,7 +27,7 @@ public class ChallengeController {
 
     @Operation(summary = "챌린지 등록")
     @PostMapping
-    public ResponseEntity<ResponseChallengeInfo> createChallenge(
+    public ResponseEntity<Void> createChallenge(
             @Parameter(hidden = true) @Auth Long memberId,
             @RequestBody RequestCreateChallenge requestCreateChallenge) {
 

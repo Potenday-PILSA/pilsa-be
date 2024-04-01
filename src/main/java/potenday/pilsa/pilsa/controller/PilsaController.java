@@ -68,7 +68,7 @@ public class PilsaController {
 
     @Operation(summary = "필사 등록", description = "")
     @PostMapping
-    public ResponseEntity<ResponsePilsaDetailDto> createPilsaInfo(
+    public ResponseEntity<Void> createPilsaInfo(
             @Parameter(hidden = true) @Auth Long memberId,
             @RequestBody @Valid RequestPilsaInfoDto request) {
 
