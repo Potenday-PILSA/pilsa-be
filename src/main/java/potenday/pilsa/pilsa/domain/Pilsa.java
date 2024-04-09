@@ -89,8 +89,9 @@ public class Pilsa {
     private Challenge challenge;
 
     @Builder
-    public Pilsa(String title, Member member,String author, String publisher, String textContents, String backgroundImageUrl, String backgroundColor, RequestPilsaInfoDto requestPilsaInfoDto) {
+    public Pilsa(String title, Member member,String author, String publisher, String textContents, String backgroundImageUrl, String backgroundColor, RequestPilsaInfoDto requestPilsaInfoDto, Challenge challenge) {
         validationContent(requestPilsaInfoDto.getImages(), textContents);
+        validationChallengeCategory(challenge, requestPilsaInfoDto);
 
         this.title = title;
         this.member = member;
@@ -102,6 +103,7 @@ public class Pilsa {
         this.backgroundColor = backgroundColor;
         this.backgroundImageUrl = backgroundImageUrl;
         this.registDate = LocalDateTime.now();
+        this.challenge = challenge;
 
         if (!requestPilsaInfoDto.getImages().isEmpty()) {
             this.status = (textContents != null) ? Status.ALL : Status.IMG;
@@ -151,6 +153,12 @@ public class Pilsa {
     private void validationContent(List<ImageRequest> images, String textContents) {
         if (images.isEmpty() && textContents.isBlank()) {
             throw new BadRequestException(ExceptionCode.NOT_INPUT_CONTENT);
+        }
+    }
+
+    private void validationChallengeCategory(Challenge challenge, RequestPilsaInfoDto request) {
+        if (challenge != null && !request.getCategoryCd().isEmpty()) {
+            throw new BadRequestException(ExceptionCode.INVALID_CHALLENGE_PILSA_CATEGORY);
         }
     }
 }
