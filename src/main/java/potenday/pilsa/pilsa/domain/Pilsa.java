@@ -2,6 +2,7 @@ package potenday.pilsa.pilsa.domain;
 
 import jakarta.persistence.*;
 import lombok.*;
+import potenday.pilsa.challenge.domain.Challenge;
 import potenday.pilsa.global.exception.BadRequestException;
 import potenday.pilsa.global.exception.ExceptionCode;
 import potenday.pilsa.like.domain.Like;
@@ -82,6 +83,10 @@ public class Pilsa {
 
     @OneToMany(mappedBy = "pilsa", cascade = CascadeType.DETACH)
     private List<Like> likes;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "challengeId")
+    private Challenge challenge;
 
     @Builder
     public Pilsa(String title, Member member,String author, String publisher, String textContents, String backgroundImageUrl, String backgroundColor, RequestPilsaInfoDto requestPilsaInfoDto) {

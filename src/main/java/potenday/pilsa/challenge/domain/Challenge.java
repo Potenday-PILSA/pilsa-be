@@ -8,6 +8,7 @@ import potenday.pilsa.global.exception.BadRequestException;
 import potenday.pilsa.global.exception.ExceptionCode;
 import potenday.pilsa.global.util.LocalDateUtil;
 import potenday.pilsa.member.domain.Member;
+import potenday.pilsa.pilsa.domain.Pilsa;
 import potenday.pilsa.pilsaCategory.domain.PilsaCategory;
 
 import java.time.LocalDate;
@@ -59,6 +60,9 @@ public class Challenge {
             inverseJoinColumns = @JoinColumn(name = "category_id"),
             joinColumns = @JoinColumn(name = "challenge_id"))
     private List<PilsaCategory> categories;
+
+    @OneToMany(mappedBy = "challenge", cascade = CascadeType.ALL)
+    private List<Pilsa> pilsas;
 
     public Challenge(Member member, LocalDateTime startDate, LocalDateTime endDate, String title, String description, List<PilsaCategory> categories) {
         this.member = member;
