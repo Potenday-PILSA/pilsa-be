@@ -86,11 +86,7 @@ public class ChallengeService {
 
         challenges.forEach(
                 challenge -> {
-                    long pilsaCount = pilsaRepository.findByMember_IdAndChallenge_IdAndDeleteDateIsNull(memberId, challenge.getId())
-                            .stream()
-                            .map(pilsa -> pilsa.getRegistDate().toLocalDate())
-                            .distinct()
-                            .count();
+                    long pilsaCount = Challenge.countDistinctRegistrationDates(pilsaRepository.findByMember_IdAndChallenge_IdAndDeleteDateIsNull(memberId, challenge.getId()));
 
                     challenge.changeStatueSuccessOrFail(pilsaCount);
                 }
