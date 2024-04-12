@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import potenday.pilsa.challenge.dto.request.RequestModifyChallenge;
 import potenday.pilsa.global.exception.BadRequestException;
 import potenday.pilsa.global.exception.ExceptionCode;
 import potenday.pilsa.global.util.LocalDateUtil;
@@ -137,6 +138,19 @@ public class Challenge {
                 .map(pilsa -> pilsa.getRegistDate().toLocalDate())
                 .distinct()
                 .count();
+    }
+
+    public void modifyChallenge(RequestModifyChallenge request) {
+        modifyTitle(request.getTitle());
+        modifyDescription(request.getDescription());
+    }
+
+    private void modifyTitle(String title) {
+        if (title != null && !title.isBlank()) this.title = title;
+    }
+
+    private void modifyDescription(String description) {
+        if (description != null && !description.isBlank()) this.description = description;
     }
 
 }
