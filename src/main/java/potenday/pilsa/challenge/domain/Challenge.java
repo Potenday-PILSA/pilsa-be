@@ -96,10 +96,7 @@ public class Challenge {
     }
 
     public void changeStatueSuccessOrFail(Long pilsaCount) {
-        LocalDate startDate = LocalDateUtil.localDateTimeToDate(this.startDate);
-        LocalDate endDate = LocalDateUtil.localDateTimeToDate(this.endDate);
-
-        long daysBetween = ChronoUnit.DAYS.between(startDate, endDate) + 1;
+        long daysBetween = calculateDaysBetween(LocalDateUtil.localDateTimeToDate(this.startDate), LocalDateUtil.localDateTimeToDate(this.endDate));
 
         if (daysBetween == pilsaCount) {
             this.status = Status.SUCCESS;
@@ -107,4 +104,39 @@ public class Challenge {
             this.status = Status.FAIL;
         }
     }
+
+    public static long calculateDaysBetween(LocalDate startDate, LocalDate endDate) {
+        return ChronoUnit.DAYS.between(startDate, endDate) + 1;
+    }
+
+    public Integer calculateChallengeAchievementRate(Challenge challenge) {
+        List<Pilsa> pilsas = challenge.getPilsas();
+
+        // 삭제된 필사 제외
+        removeDeletedPilsas(pilsas);
+
+        // 필사 등록 날짜를 기준으로 중복 제거 후 개수 구하기
+        long pilsaCount = countDistinctRegistrationDates(pilsas);
+
+        return challenge.calculateAchievementRateBasedOnPilsa(pilsaCount);
+    }
+
+    public int calculateAchievementRateBasedOnPilsa(Long pilsaCount) {
+        long daysBetween = calculateDaysBetween(LocalDateUtil.localDateTimeToDate(this.startDate), LocalDateUtil.localDateTimeToDate(this.endDate));
+
+        double rate = (double) pilsaCount / daysBetween * 100;
+        return (int) Math.round(rate);
+    }
+
+    private static void removeDeletedPilsas(List<Pilsa> pilsas) {
+        pilsas.removeIf(pilsa -> pilsa.getDeleteDate() != null);
+    }
+
+    public static long countDistinctRegistrationDates(List<Pilsa> pilsas) {
+        return pilsas.stream()
+                .map(pilsa -> pilsa.getRegistDate().toLocalDate())
+                .distinct()
+                .count();
+    }
+
 }

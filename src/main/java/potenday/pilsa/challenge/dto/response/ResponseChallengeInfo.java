@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 import potenday.pilsa.challenge.domain.Challenge;
 import potenday.pilsa.challenge.domain.Status;
 import potenday.pilsa.global.util.LocalDateUtil;
+import potenday.pilsa.pilsa.domain.Pilsa;
 import potenday.pilsa.pilsaCategory.dto.response.ResponseCategoryListDto;
 
 import java.time.LocalDate;
@@ -35,8 +36,11 @@ public class ResponseChallengeInfo {
     @Schema(description = "카테고리 리스트")
     private ResponseCategoryListDto categoryListDto;
 
+    @Schema(description = "달성률")
+    private Integer achievementRate;
+
     @Builder
-    public ResponseChallengeInfo(Long id, LocalDate startDate, LocalDate endDate, LocalDateTime registDate, String title, String description, Status status, ResponseCategoryListDto categoryListDto) {
+    public ResponseChallengeInfo(Long id, LocalDate startDate, LocalDate endDate, LocalDateTime registDate, String title, String description, Status status, ResponseCategoryListDto categoryListDto, Integer achievementRate) {
         this.id = id;
         this.startDate = startDate;
         this.endDate = endDate;
@@ -45,6 +49,7 @@ public class ResponseChallengeInfo {
         this.description = description;
         this.status = status;
         this.categoryListDto = categoryListDto;
+        this.achievementRate = achievementRate;
     }
 
     public static ResponseChallengeInfo from(Challenge challenge) {
@@ -57,6 +62,7 @@ public class ResponseChallengeInfo {
                 .description(challenge.getDescription())
                 .status(challenge.getStatus())
                 .categoryListDto(ResponseCategoryListDto.from(challenge.getCategories()))
+                .achievementRate(challenge.calculateChallengeAchievementRate(challenge))
                 .build();
     }
 
