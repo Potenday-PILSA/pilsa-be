@@ -78,19 +78,15 @@ public class ChallengeService {
     }
 
     @Transactional
-    public List<ResponseChallengeInfo> changeINGStatueSuccessOrFail(Long memberId) {
+    public void changeINGStatueSuccessOrFail(Long memberId) {
         LocalDateTime startDate =  LocalDateUtil.startLocalDateToTime(LocalDate.now());
         LocalDateTime endDate = LocalDateUtil.endLocalDateToTime(LocalDate.now());
 
         List<Challenge> challenges = challengeRepository.findByMember_IdAndDeleteDateIsNullAndStatusAndEndDateIsBetween(memberId, ING, startDate, endDate);
 
-        if (challenges.isEmpty()) {
-            return new ArrayList<>();
-        }
-
         challenges.forEach(
                 challenge -> {
-                    long pilsaCount = pilsaRepository.findByMember_IdAndRegistDateBetweenAndDeleteDateIsNull(memberId, challenge.getStartDate(), challenge.getEndDate())
+                    long pilsaCount = pilsaRepository.findByMember_IdAndChallenge_IdAndDeleteDateIsNull(memberId, challenge.getId())
                             .stream()
                             .map(pilsa -> pilsa.getRegistDate().toLocalDate())
                             .distinct()
@@ -99,8 +95,6 @@ public class ChallengeService {
                     challenge.changeStatueSuccessOrFail(pilsaCount);
                 }
         );
-
-        return ResponseChallengeInfo.from(challenges);
     }
 
     @Transactional

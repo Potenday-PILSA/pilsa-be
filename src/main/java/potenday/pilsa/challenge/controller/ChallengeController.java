@@ -67,9 +67,10 @@ public class ChallengeController {
 
     @Operation(summary = "진행중인 챌린지의 상태를 성공과 실패로 나누어서 변화시키는 API")
     @PostMapping("/change-statue")
-    public ResponseEntity<List<ResponseChallengeInfo>> changeStatue(
+    public ResponseEntity<Void> changeStatue(
             @Parameter(hidden = true) @Auth Long memberId) {
 
-        return ResponseEntity.ok(challengeService.changeINGStatueSuccessOrFail(memberId));
+        challengeService.changeINGStatueSuccessOrFail(memberId);
+        return ResponseEntity.noContent().build();
     }
 }
