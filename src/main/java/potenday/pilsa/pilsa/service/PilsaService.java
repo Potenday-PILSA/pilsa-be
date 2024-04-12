@@ -5,6 +5,8 @@ import lombok.ToString;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import potenday.pilsa.challenge.domain.Challenge;
+import potenday.pilsa.challenge.domain.repository.ChallengeRepository;
 import potenday.pilsa.global.dto.request.RequestPageDto;
 import potenday.pilsa.global.exception.BadRequestException;
 import potenday.pilsa.global.exception.ExceptionCode;
@@ -49,6 +51,7 @@ public class PilsaService {
     private final PilsaImageRepository pilsaImageRepository;
     private final RelationPilsaCategoryRepository relationPilsaCategoryRepository;
     private final LikeRepository likeRepository;
+    private final ChallengeRepository challengeRepository;
 
     @Transactional(readOnly = true)
     public ResponsePilsaListDto getAllPilsalList(RequestPilsaList request, Long memberId) {
@@ -107,6 +110,7 @@ public class PilsaService {
     @Transactional
     public Long createPilsa(Long memberId, RequestPilsaInfoDto request) {
         Member member = getMember(memberId);
+        Challenge challenge = (request.getChallengeId() != null) ? getChallenge(memberId, request.getChallengeId()) : null;
 
         Pilsa pilsa = new Pilsa(
                 request.getTitle(),
@@ -116,7 +120,8 @@ public class PilsaService {
                 request.getTextContents(),
                 request.getBackgroundImageUrl(),
                 request.getBackgroundColor(),
-                request);
+                request,
+                challenge);
 
         return pilsaSave(request, pilsa).getPilsaId();
     }
@@ -186,6 +191,12 @@ public class PilsaService {
     private Member getMember(Long memberId) {
         return memberRepository.findByIdAndStatus(memberId, Status.ACTIVE).orElseThrow(
                 () -> new BadRequestException(ExceptionCode.NOT_FOUND_MEMBER)
+        );
+    }
+
+    private Challenge getChallenge(Long memberId, Long challengeId) {
+        return challengeRepository.findByMember_IdAndDeleteDateIsNullAndId(memberId, challengeId).orElseThrow(
+                () -> new BadRequestException(ExceptionCode.NOT_FOUND_CHALLENGE)
         );
     }
 

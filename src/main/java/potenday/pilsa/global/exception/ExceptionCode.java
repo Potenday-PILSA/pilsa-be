@@ -28,6 +28,7 @@ public enum ExceptionCode {
 
     FAIL_DATE_CHALLENGE(7001, "유효하지 않은 날짜 입니다."),
     NOT_FOUND_CHALLENGE(7002, "존재하지 않은 챌린지입니다."),
+    INVALID_CHALLENGE_PILSA_CATEGORY(7003, "챌린지 필사 등록 시 카테고리는 존재할 수 없습니다."),
 
     INTERNAL_SEVER_ERROR(9999, "서버 에러가 발생하였습니다. 관리자에게 문의해 주세요.");
 

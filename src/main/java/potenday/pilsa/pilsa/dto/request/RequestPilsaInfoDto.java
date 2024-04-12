@@ -2,6 +2,7 @@ package potenday.pilsa.pilsa.dto.request;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.*;
 import potenday.pilsa.pilsa.domain.YN;
 import potenday.pilsa.pilsaImage.dto.request.ImageRequest;
@@ -34,6 +35,8 @@ public class RequestPilsaInfoDto {
     @Schema(description = "필사 카테고리 코드 리스트")
     private List<Long> categoryCd;
     @Schema(description = "이미지 정보 리스트")
+    @NotNull(message = "이미지 정보는 빈값일 수 없습니다.")
     private List<ImageRequest> images;
-
+    @Schema(description = "챌린지 번호")
+    private Long challengeId;
 }
