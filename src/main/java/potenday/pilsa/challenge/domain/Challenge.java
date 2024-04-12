@@ -141,8 +141,16 @@ public class Challenge {
     }
 
     public void modifyChallenge(RequestModifyChallenge request) {
-        this.title = request.getTitle();
-        this.description = request.getDescription();
+        modifyTitle(request.getTitle());
+        modifyDescription(request.getDescription());
+    }
+
+    private void modifyTitle(String title) {
+        if (title != null && !title.isBlank()) this.title = title;
+    }
+
+    private void modifyDescription(String description) {
+        if (description != null && !description.isBlank()) this.description = description;
     }
 
 }

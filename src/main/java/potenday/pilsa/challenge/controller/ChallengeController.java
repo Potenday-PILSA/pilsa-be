@@ -80,7 +80,7 @@ public class ChallengeController {
     public ResponseEntity<ResponseChallengeInfo> modifyChallenge(
             @Parameter(hidden = true) @Auth Long memberId,
             @PathVariable("challengeId") Long challengeId,
-            @RequestBody RequestModifyChallenge request) {
+            @RequestBody @Valid RequestModifyChallenge request) {
 
         challengeService.modifyChallenge(memberId, challengeId, request);
 
