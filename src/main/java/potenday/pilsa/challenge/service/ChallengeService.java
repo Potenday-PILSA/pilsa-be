@@ -7,6 +7,7 @@ import org.springframework.transaction.annotation.Transactional;
 import potenday.pilsa.challenge.domain.Challenge;
 import potenday.pilsa.challenge.domain.repository.ChallengeRepository;
 import potenday.pilsa.challenge.dto.request.RequestCreateChallenge;
+import potenday.pilsa.challenge.dto.request.RequestModifyChallenge;
 import potenday.pilsa.challenge.dto.response.ResponseChallengeInfo;
 import potenday.pilsa.challenge.dto.response.ResponseChallengeList;
 import potenday.pilsa.global.dto.request.RequestPageDto;
@@ -75,6 +76,13 @@ public class ChallengeService {
         Challenge challenge = challengeRepository.findByMember_IdAndDeleteDateIsNullAndId(memberId, challengeId).orElseThrow(() -> new BadRequestException(ExceptionCode.NOT_FOUND_CHALLENGE));
 
         challenge.deleteChallenge();
+    }
+
+    @Transactional
+    public void modifyChallenge(Long memberId, Long challengeId, RequestModifyChallenge request) {
+        Challenge challenge = challengeRepository.findByMember_IdAndDeleteDateIsNullAndId(memberId, challengeId).orElseThrow(() -> new BadRequestException(ExceptionCode.NOT_FOUND_CHALLENGE));
+
+        challenge.modifyChallenge(request);
     }
 
     @Transactional

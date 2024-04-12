@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import potenday.pilsa.challenge.dto.request.RequestCreateChallenge;
+import potenday.pilsa.challenge.dto.request.RequestModifyChallenge;
 import potenday.pilsa.challenge.dto.response.ResponseChallengeInfo;
 import potenday.pilsa.challenge.dto.response.ResponseChallengeList;
 import potenday.pilsa.challenge.service.ChallengeService;
@@ -72,5 +73,17 @@ public class ChallengeController {
 
         challengeService.changeINGStatueSuccessOrFail(memberId);
         return ResponseEntity.noContent().build();
+    }
+
+    @Operation(summary = "챌린지 수정 API")
+    @PutMapping("/{challengeId}")
+    public ResponseEntity<ResponseChallengeInfo> modifyChallenge(
+            @Parameter(hidden = true) @Auth Long memberId,
+            @PathVariable("challengeId") Long challengeId,
+            @RequestBody RequestModifyChallenge request) {
+
+        challengeService.modifyChallenge(memberId, challengeId, request);
+
+        return ResponseEntity.created(URI.create("challenge/" + challengeId)).build();
     }
 }
