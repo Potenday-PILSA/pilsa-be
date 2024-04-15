@@ -7,16 +7,20 @@ import org.springframework.transaction.annotation.Transactional;
 import potenday.pilsa.challenge.domain.Challenge;
 import potenday.pilsa.challenge.domain.repository.ChallengeRepository;
 import potenday.pilsa.challenge.dto.request.RequestChallengeList;
+import potenday.pilsa.challenge.dto.request.RequestChallengePilsa;
 import potenday.pilsa.challenge.dto.request.RequestCreateChallenge;
 import potenday.pilsa.challenge.dto.request.RequestModifyChallenge;
 import potenday.pilsa.challenge.dto.response.ResponseChallengeInfo;
 import potenday.pilsa.challenge.dto.response.ResponseChallengeList;
+import potenday.pilsa.challenge.dto.response.ResponseChallengePilsaInfo;
+import potenday.pilsa.challenge.dto.response.ResponseChallengePilsaInfoList;
 import potenday.pilsa.global.exception.BadRequestException;
 import potenday.pilsa.global.exception.ExceptionCode;
 import potenday.pilsa.global.util.LocalDateUtil;
 import potenday.pilsa.member.domain.Member;
 import potenday.pilsa.member.domain.Status;
 import potenday.pilsa.member.domain.repository.MemberRepository;
+import potenday.pilsa.pilsa.domain.Pilsa;
 import potenday.pilsa.pilsa.domain.repository.PilsaRepository;
 import potenday.pilsa.pilsaCategory.domain.PilsaCategory;
 import potenday.pilsa.pilsaCategory.domain.YN;
@@ -109,6 +113,24 @@ public class ChallengeService {
 
         challenges.forEach(Challenge::setStatus);
     }
+
+    public ResponseChallengePilsaInfoList getChallengePilsa(Long memberId, RequestChallengePilsa requestChallengePilsa) {
+        List<Pilsa> pilsas;
+
+        if (requestChallengePilsa.getLocalDate() != null) {
+            LocalDateTime startDt = LocalDateUtil.startLocalDateToTime(requestChallengePilsa.getLocalDate());
+            LocalDateTime endDt = LocalDateUtil.endLocalDateToTime(requestChallengePilsa.getLocalDate());
+
+            pilsas = pilsaRepository.findByMember_IdAndChallenge_IdAndDeleteDateIsNullAndRegistDateBetweenOrderByRegistDateDesc(
+                    memberId, requestChallengePilsa.getChallengeId(), startDt, endDt);
+        } else {
+            pilsas = pilsaRepository.findByMember_IdAndChallenge_IdAndDeleteDateIsNullOrderByRegistDateDesc(
+                    memberId, requestChallengePilsa.getChallengeId());
+        }
+
+        return ResponseChallengePilsaInfoList.from(pilsas);
+    }
+
 
     private Member getMember(Long memberId) {
         return memberRepository.findByIdAndStatus(memberId, Status.ACTIVE).orElseThrow(() -> new BadRequestException(ExceptionCode.NOT_FOUND_MEMBER));

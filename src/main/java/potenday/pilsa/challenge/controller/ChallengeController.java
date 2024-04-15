@@ -8,10 +8,13 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import potenday.pilsa.challenge.dto.request.RequestChallengeList;
+import potenday.pilsa.challenge.dto.request.RequestChallengePilsa;
 import potenday.pilsa.challenge.dto.request.RequestCreateChallenge;
 import potenday.pilsa.challenge.dto.request.RequestModifyChallenge;
 import potenday.pilsa.challenge.dto.response.ResponseChallengeInfo;
 import potenday.pilsa.challenge.dto.response.ResponseChallengeList;
+import potenday.pilsa.challenge.dto.response.ResponseChallengePilsaInfo;
+import potenday.pilsa.challenge.dto.response.ResponseChallengePilsaInfoList;
 import potenday.pilsa.challenge.service.ChallengeService;
 import potenday.pilsa.login.Auth;
 
@@ -85,4 +88,14 @@ public class ChallengeController {
 
         return ResponseEntity.created(URI.create("challenge/" + challengeId)).build();
     }
+
+    @Operation(summary = "챌린지에 해당하는 필사 리스트 조회")
+    @GetMapping("/pilsa")
+    public ResponseEntity<ResponseChallengePilsaInfoList> getChallengePilsas(
+            @Parameter(hidden = true) @Auth Long memberId,
+            @Valid RequestChallengePilsa requestChallengePilsa) {
+
+        return ResponseEntity.ok(challengeService.getChallengePilsa(memberId, requestChallengePilsa));
+    }
+
 }
