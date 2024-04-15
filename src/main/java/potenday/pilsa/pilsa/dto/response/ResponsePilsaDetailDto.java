@@ -5,6 +5,7 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import potenday.pilsa.challenge.domain.Challenge;
 import potenday.pilsa.member.dto.response.MemberInfoResponse;
 import potenday.pilsa.pilsa.domain.Pilsa;
 import potenday.pilsa.pilsa.domain.YN;
@@ -48,9 +49,13 @@ public class ResponsePilsaDetailDto {
     private Boolean isLikedAble;
     @Schema(description = "좋아요 개수")
     private Integer likeCount;
+    @Schema(description = "챌린지 필사 여부 (true: 챌린지 필사, false: 챌린지 필사가 아닌 일반 필사)")
+    private Boolean isChallenge;
+    @Schema(description = "챌린지 필사 일 경우 챌린지 제목")
+    private String challengeTitle;
 
     @Builder
-    public ResponsePilsaDetailDto(Long pilsaId, String title, String author, String publisher, YN privateType, String textContents, String backgroundImageUrl, String backgroundColor, LocalDateTime registDate, LocalDateTime updateDate, List<ResponseCategoryDto> categoryLists, List<ResponseImagetDto> pilsaImages, MemberInfoResponse memberInfoResponse, Boolean isLikedAble, Integer likeCount) {
+    public ResponsePilsaDetailDto(Long pilsaId, String title, String author, String publisher, YN privateType, String textContents, String backgroundImageUrl, String backgroundColor, LocalDateTime registDate, LocalDateTime updateDate, List<ResponseCategoryDto> categoryLists, List<ResponseImagetDto> pilsaImages, MemberInfoResponse memberInfoResponse, Boolean isLikedAble, Integer likeCount, Boolean isChallenge, String challengeTitle) {
         this.pilsaId = pilsaId;
         this.title = title;
         this.author = author;
@@ -66,6 +71,8 @@ public class ResponsePilsaDetailDto {
         this.memberInfoResponse = memberInfoResponse;
         this.isLikedAble = isLikedAble;
         this.likeCount = likeCount;
+        this.isChallenge = isChallenge;
+        this.challengeTitle = challengeTitle;
     }
 
     public static ResponsePilsaDetailDto from(Pilsa pilsa, Boolean isLikedAble) {
@@ -78,6 +85,8 @@ public class ResponsePilsaDetailDto {
                 .stream()
                 .map(ResponseImagetDto::from)
                 .toList();
+
+        Challenge challenge = pilsa.getChallenge();
 
         return ResponsePilsaDetailDto.builder()
                 .pilsaId(pilsa.getPilsaId())
@@ -95,6 +104,8 @@ public class ResponsePilsaDetailDto {
                 .pilsaImages(responseImagetDtos)
                 .isLikedAble(isLikedAble)
                 .likeCount(pilsa.getLikes().size())
+                .isChallenge(challenge != null)
+                .challengeTitle(challenge != null ? challenge.getTitle() : null)
                 .build();
     }
 }
