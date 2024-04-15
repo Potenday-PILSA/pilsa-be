@@ -7,13 +7,12 @@ import potenday.pilsa.challenge.domain.Challenge;
 import potenday.pilsa.challenge.domain.Status;
 
 import java.time.LocalDateTime;
-import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 
 public interface ChallengeRepository extends JpaRepository<Challenge, Long> {
     Optional<Challenge> findByMember_IdAndDeleteDateIsNullAndId(Long memberId, Long id);
-    Page<Challenge> findByMember_IdAndDeleteDateIsNullOrderByRegistDateDesc(Long memberId, Pageable pageable);
+    Page<Challenge> findByMember_IdAndDeleteDateIsNullAndStatusInOrderByRegistDateDesc(Long memberId, List<Status> statuses,Pageable pageable);
     List<Challenge> findByDeleteDateIsNullAndStatusAndStartDateIsBefore(Status status, LocalDateTime startDate);
     List<Challenge> findByMember_IdAndDeleteDateIsNullAndStatusAndEndDateIsBetween(Long memberId, Status status, LocalDateTime endDate, LocalDateTime endDate2);
 }

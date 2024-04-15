@@ -6,11 +6,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import potenday.pilsa.challenge.domain.Challenge;
 import potenday.pilsa.challenge.domain.repository.ChallengeRepository;
+import potenday.pilsa.challenge.dto.request.RequestChallengeList;
 import potenday.pilsa.challenge.dto.request.RequestCreateChallenge;
 import potenday.pilsa.challenge.dto.request.RequestModifyChallenge;
 import potenday.pilsa.challenge.dto.response.ResponseChallengeInfo;
 import potenday.pilsa.challenge.dto.response.ResponseChallengeList;
-import potenday.pilsa.global.dto.request.RequestPageDto;
 import potenday.pilsa.global.exception.BadRequestException;
 import potenday.pilsa.global.exception.ExceptionCode;
 import potenday.pilsa.global.util.LocalDateUtil;
@@ -24,7 +24,6 @@ import potenday.pilsa.pilsaCategory.domain.repository.PilsaCategoryRepository;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 
 import static potenday.pilsa.challenge.domain.Status.EXPECTED;
@@ -64,8 +63,10 @@ public class ChallengeService {
     }
 
     @Transactional(readOnly = true)
-    public ResponseChallengeList getChallengeList(Long memberId, RequestPageDto requestPageDto) {
-        Page<Challenge> challenges = challengeRepository.findByMember_IdAndDeleteDateIsNullOrderByRegistDateDesc(memberId, requestPageDto.toPageable());
+    public ResponseChallengeList getChallengeList(Long memberId, RequestChallengeList request) {
+        List<potenday.pilsa.challenge.domain.Status> statuses = Challenge.mapRequestStatusToDomainStatus(request.getStatus());
+
+        Page<Challenge> challenges = challengeRepository.findByMember_IdAndDeleteDateIsNullAndStatusInOrderByRegistDateDesc(memberId, statuses, request.toPageable());
         changeINGStatueSuccessOrFail(memberId);
 
         return ResponseChallengeList.from(challenges);
