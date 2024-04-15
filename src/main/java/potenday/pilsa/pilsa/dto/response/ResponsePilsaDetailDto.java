@@ -53,9 +53,11 @@ public class ResponsePilsaDetailDto {
     private Boolean isChallenge;
     @Schema(description = "챌린지 필사 일 경우 챌린지 제목")
     private String challengeTitle;
+    @Schema(description = "챌린지 번호")
+    private Long challengeId;
 
     @Builder
-    public ResponsePilsaDetailDto(Long pilsaId, String title, String author, String publisher, YN privateType, String textContents, String backgroundImageUrl, String backgroundColor, LocalDateTime registDate, LocalDateTime updateDate, List<ResponseCategoryDto> categoryLists, List<ResponseImagetDto> pilsaImages, MemberInfoResponse memberInfoResponse, Boolean isLikedAble, Integer likeCount, Boolean isChallenge, String challengeTitle) {
+    public ResponsePilsaDetailDto(Long pilsaId, String title, String author, String publisher, YN privateType, String textContents, String backgroundImageUrl, String backgroundColor, LocalDateTime registDate, LocalDateTime updateDate, List<ResponseCategoryDto> categoryLists, List<ResponseImagetDto> pilsaImages, MemberInfoResponse memberInfoResponse, Boolean isLikedAble, Integer likeCount, Boolean isChallenge, String challengeTitle, Long challengeId) {
         this.pilsaId = pilsaId;
         this.title = title;
         this.author = author;
@@ -73,6 +75,7 @@ public class ResponsePilsaDetailDto {
         this.likeCount = likeCount;
         this.isChallenge = isChallenge;
         this.challengeTitle = challengeTitle;
+        this.challengeId = challengeId;
     }
 
     public static ResponsePilsaDetailDto from(Pilsa pilsa, Boolean isLikedAble) {
@@ -106,6 +109,7 @@ public class ResponsePilsaDetailDto {
                 .likeCount(pilsa.getLikes().size())
                 .isChallenge(challenge != null)
                 .challengeTitle(challenge != null ? challenge.getTitle() : null)
+                .challengeId(challenge != null ? challenge.getId() : null)
                 .build();
     }
 }
