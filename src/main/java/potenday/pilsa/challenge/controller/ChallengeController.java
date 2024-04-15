@@ -7,16 +7,15 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import potenday.pilsa.challenge.dto.request.RequestChallengeList;
 import potenday.pilsa.challenge.dto.request.RequestCreateChallenge;
 import potenday.pilsa.challenge.dto.request.RequestModifyChallenge;
 import potenday.pilsa.challenge.dto.response.ResponseChallengeInfo;
 import potenday.pilsa.challenge.dto.response.ResponseChallengeList;
 import potenday.pilsa.challenge.service.ChallengeService;
-import potenday.pilsa.global.dto.request.RequestPageDto;
 import potenday.pilsa.login.Auth;
 
 import java.net.URI;
-import java.util.List;
 
 @Tag(name = "챌린지")
 @RestController
@@ -50,7 +49,7 @@ public class ChallengeController {
     @GetMapping("/list")
     public ResponseEntity<ResponseChallengeList> getChallengeList(
             @Parameter(hidden = true) @Auth Long memberId,
-            @Valid RequestPageDto requestPageDto) {
+            @Valid RequestChallengeList requestPageDto) {
 
         return ResponseEntity.ok(challengeService.getChallengeList(memberId, requestPageDto));
     }

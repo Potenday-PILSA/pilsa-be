@@ -5,6 +5,7 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import potenday.pilsa.challenge.dto.request.RequestModifyChallenge;
+import potenday.pilsa.challenge.dto.request.RequestStatus;
 import potenday.pilsa.global.exception.BadRequestException;
 import potenday.pilsa.global.exception.ExceptionCode;
 import potenday.pilsa.global.util.LocalDateUtil;
@@ -15,6 +16,7 @@ import potenday.pilsa.pilsaCategory.domain.PilsaCategory;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -151,6 +153,16 @@ public class Challenge {
 
     private void modifyDescription(String description) {
         if (description != null && !description.isBlank()) this.description = description;
+    }
+
+    public static List<Status> mapRequestStatusToDomainStatus(List<RequestStatus> requestStatuses) {
+        List<Status> statuses = new ArrayList<>();
+        if (requestStatuses != null) {
+            for (RequestStatus reqStatus : requestStatuses) {
+                statuses.addAll(reqStatus.getMappedStatuses());
+            }
+        }
+        return statuses;
     }
 
 }
